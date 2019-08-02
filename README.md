@@ -43,9 +43,9 @@ create coins class.
 
 * AAU I want to control the character's ability to jump by pressing the space bar. 
 
-*AAU I want to be able to click a button to start a new game.
+* AAU I want to be able to click a button to start a new game.
 
-*AAU I want to be able to control the character to attack enemies with a button press. 
+* AAU I want to be able to control the character to attack enemies with a button press. 
 
-*AAU I want to have clear feedback about my score and if the game is over
+* AAU I want to have clear feedback about my score and if the game is over
 
