@@ -55,52 +55,37 @@ window.addEventListener('keydown', function (event) {
         DOM.running = false;
         DOM.attacking = false;
         animationIdx = 0;
-        requestAnimationFrame(renderJump);
     }
     if (event.code === 'Space' && DOM.attacking === false) {
         DOM.attacking = true;
         DOM.jumping = false;
         DOM.running = false;
         animationIdx = 0;
-        requestAnimationFrame(renderAttack);
     }
 })
 
 /*----- functions -----*/
+render()
 
-
-function renderRun() {
+function render() {
     setTimeout(function () {
+        //this will render the run animation
         if (DOM.running === true) {
-            x -= 3;
-            backgroundEl.style.transform = `translateX(${x}px)`
             domRunnerEl.setAttribute('src', `${DOM.runAnimation[animationIdx]}`)
             animationIdx++
             if (animationIdx === DOM.runAnimation.length - 1) animationIdx = 0;
-            requestAnimationFrame(renderRun);
         }
-    }, 150)
-}
-
-// renderRun()
-
-function renderJump() {
-    setTimeout(function () {
-        if (DOM.jumping === true) {
+        //this will render jump animation
+        else if (DOM.jumping === true) {
             domRunnerEl.setAttribute('src', `${DOM.jumpAnimation[animationIdx]}`);
             animationIdx++;
             if (animationIdx === DOM.jumpAnimation.length - 1) {
                 DOM.jumping = false;
                 DOM.running = true;
                 animationIdx = 0;
-                requestAnimationFrame(renderRun);
-            } else requestAnimationFrame(renderJump);
+            }
         }
-    }, 150)
-}
-
-function renderAttack() {
-    setTimeout(function () {
+        // this will render attack animation
         if (DOM.attacking === true) {
             domRunnerEl.setAttribute('src', `${DOM.attackAnimation[animationIdx]}`);
             animationIdx++;
@@ -108,8 +93,18 @@ function renderAttack() {
                 DOM.attacking = false;
                 DOM.running = true;
                 animationIdx = 0;
-                requestAnimationFrame(renderRun);
-            } else requestAnimationFrame(renderAttack);
+            }
         }
+        requestAnimationFrame(render);
     }, 150)
+}
+
+backgroundscroll()
+
+function backgroundscroll() {
+    setTimeout(() => {
+        x -= 1;
+        backgroundEl.style.transform = `translateX(${x}px)`
+        backgroundscroll();
+    }, 8);
 }

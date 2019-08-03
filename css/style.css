@@ -12,26 +12,25 @@ body {
 .container {
     position: absolute;
     width: 1000px;
-    height: 600px;
-    z-index: -1;
+    height: 500px;
+    /* overflow: hidden; */
 }
 
 #background {
-    /* justify-self: normal; */
     background: url("../resources/Free Pixel Art Forest/Preview/Background.png");
-    background-position-y: -980px;
-    background-repeat: repeat-y;
+    background-position-y: -1080px;
+    background-repeat: repeat;
     width: 100000px;
-    height: 600px;
-    overflow: hidden;
+    height: 500px;
     z-index: -1;
     opacity: .95;
+    transition: .145s;
 }
 
 #DOM-runner {
     width: 120px;
     height: 100px;
-    margin: 450px 0 100px 100px;
+    margin: 350px 0 0 100px;
     z-index: 1;
     opacity: .9;
 }
