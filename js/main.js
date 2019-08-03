@@ -1,5 +1,8 @@
 /*----- constants -----*/
+const BACKGROUNDWIDTH = 5000;
 const DOM = {
+    x: 0,
+    y: 0,
     runAnimation: [
         '../resources/v2.1/Indvidual Sprites/adventurer-run-00-1.3.png',
         '../resources/v2.1/Indvidual Sprites/adventurer-run-01-1.3.png',
@@ -32,16 +35,29 @@ const DOM = {
         '../resources/v2.1/Indvidual Sprites/adventurer-attack2-04-1.3.png',
         '../resources/v2.1/Indvidual Sprites/adventurer-attack2-05-1.3.png'
     ],
+    collisionDetection: function (object) {
+        if (object.x === this.x && object.y === this.y) {
+            console.log(`collided with ${object}`)
+        }
+    },
     jumping: false,
     attacking: false,
     running: true,
 }
 
+/*----- Classes -----*/
+class Obstacle {
+    constructor(xpos, ypos) {
+        this.x = xpos;
+        this.y = ypos;
+    }
+}
+
 
 /*----- app's state (variables) -----*/
+const win = 10000
 let score;
-let x = 0;
-let animationIdx = 0
+let animationIdx = 0;
 
 /*----- cached element references -----*/
 const backgroundEl = document.getElementById('background');
@@ -55,6 +71,7 @@ window.addEventListener('keydown', function (event) {
         DOM.running = false;
         DOM.attacking = false;
         animationIdx = 0;
+        DOM.y = 1;
     }
     if (event.code === 'Space' && DOM.attacking === false) {
         DOM.attacking = true;
@@ -96,15 +113,15 @@ function render() {
             }
         }
         requestAnimationFrame(render);
-    }, 150)
+    }, 125)
 }
 
 backgroundscroll()
 
 function backgroundscroll() {
     setTimeout(() => {
-        x -= 1;
-        backgroundEl.style.transform = `translateX(${x}px)`
+        DOM.x -= 1;
+        backgroundEl.style.transform = `translateX(${DOM.x}px)`
         backgroundscroll();
-    }, 8);
+    }, 5);
 }
