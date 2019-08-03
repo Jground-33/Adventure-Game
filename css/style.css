@@ -1,0 +1,32 @@
+body {
+    background: lightgrey;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+
+
+#container {
+    background: url(https://static.vecteezy.com/system/resources/previews/000/364/646/non_2x/background-cloudy-landscape-over-the-sea-panoramic-wide-banner-nature-vector-graphics.jpg);
+    background-position-x: 0px;
+    width: 1000px;
+    height: 600px;
+    overflow: hidden;
+    z-index: -1;
+}
+
+#DOM-runner {
+    border: solid 1px red;
+    width: 100px;
+    height: 100px;
+    position: absolute;
+
+    z-index: 1;
+}
+
+
