@@ -2,7 +2,8 @@
 const BACKGROUNDWIDTH = 5000;
 const DOM = {
     x: 0,
-    y: 0,
+    y: 350, // value in pixels
+    yVelocity: 0,
     runAnimation: [
         '../resources/v2.1/Indvidual Sprites/adventurer-run-00-1.3.png',
         '../resources/v2.1/Indvidual Sprites/adventurer-run-01-1.3.png',
@@ -35,14 +36,22 @@ const DOM = {
         '../resources/v2.1/Indvidual Sprites/adventurer-attack2-04-1.3.png',
         '../resources/v2.1/Indvidual Sprites/adventurer-attack2-05-1.3.png'
     ],
+    idleAnimation: [
+        '../resources/v2.1/Indvidual Sprites/adventurer-idle-00-1.3.png',
+        '../resources/v2.1/Indvidual Sprites/adventurer-idle-00-1.3.png',
+        '../resources/v2.1/Indvidual Sprites/adventurer-idle-01-1.3.png',
+        '../resources/v2.1/Indvidual Sprites/adventurer-idle-01-1.3.png',
+        '../resources/v2.1/Indvidual Sprites/adventurer-idle-02-1.3.png',
+        '../resources/v2.1/Indvidual Sprites/adventurer-idle-02-1.3.png',
+        '../resources/v2.1/Indvidual Sprites/adventurer-idle-03-1.3.png',
+        '../resources/v2.1/Indvidual Sprites/adventurer-idle-03-1.3.png',
+    ],
     collisionDetection: function (object) {
         if (object.x === this.x && object.y === this.y) {
             console.log(`collided with ${object}`)
         }
     },
-    jumping: false,
-    attacking: false,
-    running: true,
+    currentAnimation: 'idle', // idle, running, jumping, attacking;
 }
 
 /*----- Classes -----*/
@@ -53,11 +62,10 @@ class Obstacle {
     }
 }
 
-
 /*----- app's state (variables) -----*/
-const win = 10000
 let score;
 let animationIdx = 0;
+let jumpCounter
 
 /*----- cached element references -----*/
 const backgroundEl = document.getElementById('background');
@@ -66,49 +74,60 @@ const domRunnerEl = document.getElementById('DOM-runner');
 /*----- event listeners -----*/
 window.addEventListener('keydown', function (event) {
     this.console.log(event)
-    if (event.key === 'ArrowUp' && DOM.jumping === false) {
-        DOM.jumping = true;
-        DOM.running = false;
-        DOM.attacking = false;
+    if (event.key === 'ArrowUp' && DOM.currentAnimation !== 'jumping') {
+        DOM.currentAnimation = 'jumping';
         animationIdx = 0;
-        DOM.y = 1;
+        jumpCounter = 0;
+        DOM.yVelocity -= 25;
+        animateEaseY()
     }
-    if (event.code === 'Space' && DOM.attacking === false) {
-        DOM.attacking = true;
-        DOM.jumping = false;
-        DOM.running = false;
+    if (event.code === 'Space' && DOM.currentAnimation !== 'attacking') {
+        DOM.currentAnimation = 'attacking';
         animationIdx = 0;
     }
 })
 
 /*----- functions -----*/
+
+// startNewGame();
+function startNewGame() {
+    let score = 0;
+    backgroundscroll()
+    DOM.currentAnimation = 'running'
+}
+
+
 render()
 
 function render() {
     setTimeout(function () {
+        //this will render DOM's idle animation
+        if (DOM.currentAnimation === 'idle') {
+            domRunnerEl.setAttribute('src', `${DOM.idleAnimation[animationIdx]}`)
+            animationIdx++
+            if (animationIdx === DOM.idleAnimation.length - 1) animationIdx = 0;
+        }
         //this will render the run animation
-        if (DOM.running === true) {
+        else if (DOM.currentAnimation === 'running') {
             domRunnerEl.setAttribute('src', `${DOM.runAnimation[animationIdx]}`)
             animationIdx++
             if (animationIdx === DOM.runAnimation.length - 1) animationIdx = 0;
         }
-        //this will render jump animation
-        else if (DOM.jumping === true) {
+        //this will render jump animation // TODO - animate DOM's y pos frame by frame
+        else if (DOM.currentAnimation === 'jumping') {
             domRunnerEl.setAttribute('src', `${DOM.jumpAnimation[animationIdx]}`);
             animationIdx++;
             if (animationIdx === DOM.jumpAnimation.length - 1) {
-                DOM.jumping = false;
-                DOM.running = true;
+                DOM.currentAnimation = 'running'
                 animationIdx = 0;
             }
         }
         // this will render attack animation
-        if (DOM.attacking === true) {
+        if (DOM.currentAnimation === 'attacking') {
             domRunnerEl.setAttribute('src', `${DOM.attackAnimation[animationIdx]}`);
             animationIdx++;
             if (animationIdx === DOM.attackAnimation.length - 1) {
-                DOM.attacking = false;
-                DOM.running = true;
+                DOM.currentAnimation = 'running'
                 animationIdx = 0;
             }
         }
@@ -116,10 +135,26 @@ function render() {
     }, 125)
 }
 
-backgroundscroll()
+function animateEaseY() {
+        if (DOM.y > 350) {
+            DOM.y = 350
+            DOM.yVelocity = 0
+            domRunnerEl.style.top = `${DOM.y}px`
+            return
+        } else {
+            DOM.yVelocity += 1.5; // gravity
+            DOM.y += DOM.yVelocity; 
+            DOM.yVelocity *= 0.9; // friction
+            domRunnerEl.style.top = `${DOM.y}px`
+            requestAnimationFrame(animateEaseY);
+        }
+}
+
+// backgroundscroll()
 
 function backgroundscroll() {
     setTimeout(() => {
+        // if (DOM.x < -5000) alert(`you've won!!!`)
         DOM.x -= 1;
         backgroundEl.style.transform = `translateX(${DOM.x}px)`
         backgroundscroll();
