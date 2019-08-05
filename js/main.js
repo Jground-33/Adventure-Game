@@ -60,6 +60,7 @@ const DOM = {
         if (this.outerRange > object.x && this.innerRange < (object.x + object.width) && this.y + this.height > 410) { // ready to test collision detection.
             DOM.currentAnimation = 'died';
             document.querySelector('body').style.backgroundColor = 'black'
+            startBtn.style.visibility = 'hidden'
         }
     },
     currentAnimation: 'idle', // idle, running, jumping, attacking;
@@ -84,6 +85,7 @@ let score;
 let animationIdx = 0;
 let BAIdx = 0;
 let bombs = [];
+let gameOn = false;
 
 
 
@@ -91,6 +93,7 @@ let bombs = [];
 const backgroundElem = document.getElementById('background');
 const domRunnerElem = document.getElementById('DOM-runner');
 const viewportElem = document.getElementById('viewport');
+const startBtn = document.getElementById('start');
 let bombElems;
 
 
@@ -102,10 +105,14 @@ window.addEventListener('keydown', function (event) {
         DOM.yVelocity -= 20;
         animateJump()
     }
-    if (event.code === 'Space' && DOM.currentAnimation !== 'attacking') {
+    if (event.code === 'KeyA' && DOM.currentAnimation !== 'attacking') {
         DOM.currentAnimation = 'attacking';
         animationIdx = 0;
     }
+})
+
+startBtn.addEventListener('click', (event) => {
+    if (gameOn) startNewGame()
 })
 
 /*----- functions -----*/
@@ -113,7 +120,7 @@ window.addEventListener('keydown', function (event) {
 init();
 
 function init() {
-    DOM.x = 0; 
+    DOM.x = 0;
     // creates Bombs and bomb elements 
     for (let i = 1; i < 7; i++) {
         let bomb = new Bomb(i * 750);
@@ -126,7 +133,7 @@ function init() {
     }
     bombElems = document.querySelectorAll('.bomb');
     score = 0;
-    render()
+    gameOn = true;
 }
 
 function startNewGame() {
@@ -135,6 +142,7 @@ function startNewGame() {
 }
 
 
+render()
 function render() {
     setTimeout(function () {
         //this will render DOM's idle animation
@@ -167,10 +175,13 @@ function render() {
             }
         }
         // renders death animation
-        if(DOM.currentAnimation === 'died') {
+        if (DOM.currentAnimation === 'died') {
             domRunnerElem.setAttribute('src', `${DOM.dieAnimation[animationIdx]}`);
             animationIdx++;
-            if (animationIdx === DOM.dieAnimation.length - 1) return;
+            if (animationIdx === DOM.dieAnimation.length - 1) {
+                gameOn = false;
+                return;
+            }
         }
         // this renders bomb animation 
         bombElems.forEach((elem, idx) => {
@@ -205,9 +216,9 @@ function animateJump() {
 }
 
 function backgroundscroll() {
-        if(DOM.currentAnimation === 'died') return;
-        DOM.x -= 4
-        backgroundElem.style.transform = `translateX(${DOM.x}px)`
-        bombs.forEach(bomb => bomb.x -= 4)
-        requestAnimationFrame(backgroundscroll)
+    if (DOM.currentAnimation === 'died') return;
+    DOM.x -= 4
+    backgroundElem.style.transform = `translateX(${DOM.x}px)`
+    bombs.forEach(bomb => bomb.x -= 4)
+    requestAnimationFrame(backgroundscroll)
 }
