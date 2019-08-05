@@ -1,12 +1,37 @@
 body {
-    background: lightgrey;
+    background: gray;
     height: 100vh;
     margin: 0;
     padding: 0;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     overflow: hidden;
+}
+
+header {
+    position: absolute;
+    top: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100px;
+    width: 1000px;
+}
+
+#score {
+    margin: 10px;
+}
+
+#title {
+    text-align: center;
+}
+
+#start {
+    margin: 10px;
+    height: 40%;
+    border-radius: 10px;
 }
 
 .container {

@@ -58,7 +58,8 @@ const DOM = {
     ],
     collisionDetection: function (object) {
         if (this.outerRange > object.x && this.innerRange < (object.x + object.width) && this.y + this.height > 410) { // ready to test collision detection.
-            console.log(`collided with ${object}`)
+            DOM.currentAnimation = 'died';
+            document.querySelector('body').style.backgroundColor = 'black'
         }
     },
     currentAnimation: 'idle', // idle, running, jumping, attacking;
@@ -85,23 +86,13 @@ let BAIdx = 0;
 let bombs = [];
 
 
+
 /*----- cached element references -----*/
 const backgroundElem = document.getElementById('background');
 const domRunnerElem = document.getElementById('DOM-runner');
 const viewportElem = document.getElementById('viewport');
+let bombElems;
 
-
-/*----- createing bomb elements -----*/
-for (let i = 1; i < 7; i++) {
-    let bomb = new Bomb(i * 750);
-    let img = document.createElement('img');
-    bombs.push(bomb)
-    img.className = 'bomb'
-    img.setAttribute('src', '../resources/bomb0.png')
-    img.style.left = `${bomb.x}px`;
-    backgroundElem.append(img)
-}
-const bombElems = document.querySelectorAll('.bomb');
 
 /*----- event listeners -----*/
 window.addEventListener('keydown', function (event) {
@@ -119,15 +110,30 @@ window.addEventListener('keydown', function (event) {
 
 /*----- functions -----*/
 
-// startNewGame();
+init();
+
+function init() {
+    DOM.x = 0; 
+    // creates Bombs and bomb elements 
+    for (let i = 1; i < 7; i++) {
+        let bomb = new Bomb(i * 750);
+        let img = document.createElement('img');
+        bombs.push(bomb)
+        img.className = 'bomb'
+        img.setAttribute('src', '../resources/bomb0.png')
+        img.style.left = `${bomb.x}px`;
+        backgroundElem.append(img)
+    }
+    bombElems = document.querySelectorAll('.bomb');
+    score = 0;
+    render()
+}
 
 function startNewGame() {
-    let score = 0;
     DOM.currentAnimation = 'running'
     backgroundscroll()
 }
 
-render()
 
 function render() {
     setTimeout(function () {
@@ -159,6 +165,12 @@ function render() {
                 DOM.currentAnimation = 'running'
                 animationIdx = 0;
             }
+        }
+        // renders death animation
+        if(DOM.currentAnimation === 'died') {
+            domRunnerElem.setAttribute('src', `${DOM.dieAnimation[animationIdx]}`);
+            animationIdx++;
+            if (animationIdx === DOM.dieAnimation.length - 1) return;
         }
         // this renders bomb animation 
         bombElems.forEach((elem, idx) => {
@@ -193,10 +205,9 @@ function animateJump() {
 }
 
 function backgroundscroll() {
-    setTimeout(() => {
-        DOM.x--;
+        if(DOM.currentAnimation === 'died') return;
+        DOM.x -= 4
         backgroundElem.style.transform = `translateX(${DOM.x}px)`
-        bombs.forEach(bomb => bomb.x--)
-        backgroundscroll();
-    }, 5);
+        bombs.forEach(bomb => bomb.x -= 4)
+        requestAnimationFrame(backgroundscroll)
 }
