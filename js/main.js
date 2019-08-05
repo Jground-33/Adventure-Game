@@ -57,7 +57,7 @@ const DOM = {
         '../resources/v2.1/Indvidual Sprites/adventurer-idle-03-1.3.png',
     ],
     collisionDetection: function (object) {
-        if (this.outerRange > object.x && this.innerRange < (object.x + object.width) && this.y + this.height > 410) { // ready to test collision detection.
+        if (this.outerRange > object.x && this.innerRange < (object.x + object.width) && this.y + this.height > 410) {
             DOM.currentAnimation = 'died';
             document.querySelector('body').style.backgroundColor = 'black'
             startBtn.style.visibility = 'hidden'
@@ -83,11 +83,9 @@ class Bomb {
 /*----- app's (variables) -----*/
 let score;
 let animationIdx = 0;
-let BAIdx = 0;
+let bombAnimationIdx = 0;
 let bombs = [];
 let gameOn = false;
-
-
 
 /*----- cached element references -----*/
 const backgroundElem = document.getElementById('background');
@@ -99,13 +97,14 @@ let bombElems;
 
 /*----- event listeners -----*/
 window.addEventListener('keydown', function (event) {
+    if(event.code === 'Space') event.preventDefault();
     if (event.key === 'ArrowUp' && DOM.currentAnimation === 'running') {
         DOM.currentAnimation = 'jumping';
         animationIdx = 1;
         DOM.yVelocity -= 20;
         animateJump()
     }
-    if (event.code === 'KeyA' && DOM.currentAnimation !== 'attacking') {
+    if (event.code === 'Space' && DOM.currentAnimation !== 'attacking') {
         DOM.currentAnimation = 'attacking';
         animationIdx = 0;
     }
@@ -143,6 +142,7 @@ function startNewGame() {
 
 
 render()
+
 function render() {
     setTimeout(function () {
         //this will render DOM's idle animation
@@ -185,11 +185,11 @@ function render() {
         }
         // this renders bomb animation 
         bombElems.forEach((elem, idx) => {
-            elem.setAttribute('src', `${bombAnimation[BAIdx]}`)
+            elem.setAttribute('src', `${bombAnimation[bombAnimationIdx]}`)
             DOM.collisionDetection(bombs[idx]);
         })
-        if (BAIdx === 1) BAIdx = 0
-        else BAIdx++
+        if (bombAnimationIdx === 1) bombAnimationIdx = 0
+        else bombAnimationIdx++
         if (DOM.x < -5100) {
             alert(`you've won!!!`)
             DOM.currentAnimation = 'idle'
