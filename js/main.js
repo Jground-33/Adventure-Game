@@ -61,6 +61,11 @@ const DOM = {
     currentAnimation: 'idle', // idle, running, jumping, attacking;
 }
 
+const bombAnimation = [
+    '../resources/bomb0.png',
+    '../resources/bomb1.png'
+]
+
 /*----- Classes -----*/
 class Bomb {
     constructor(x) {
@@ -69,26 +74,38 @@ class Bomb {
     }
 }
 
-
-
 /*----- app's (variables) -----*/
 let score;
 let animationIdx = 0;
+let BAidx = 0;
 let bombs = [];
 
+
 /*----- cached element references -----*/
-const backgroundEl = document.getElementById('background');
-const domRunnerEl = document.getElementById('DOM-runner');
-// const container = document.getElementById('viewport');
+const backgroundElem = document.getElementById('background');
+const domRunnerElem = document.getElementById('DOM-runner');
+const viewportElem = document.getElementById('viewport');
+
+
+/*----- createing bomb elements -----*/
+for (let i = 1; i < 7; i++) {
+    let bomb = new Bomb(i * 750);
+    let img = document.createElement('img');
+    bombs.push(bomb)
+    img.className = 'bomb'
+    img.setAttribute('src', '../resources/bomb0.png')
+    img.style.left = `${bomb.x}px`;
+    backgroundElem.append(img)
+}
+const bombElems = document.querySelectorAll('.bomb');
 
 /*----- event listeners -----*/
 window.addEventListener('keydown', function (event) {
-    this.console.log(event)
     if (event.key === 'ArrowUp' && DOM.currentAnimation === 'running') {
         DOM.currentAnimation = 'jumping';
         animationIdx = 1;
         DOM.yVelocity -= 20;
-        animateEaseY()
+        animateJump()
     }
     if (event.code === 'Space' && DOM.currentAnimation !== 'attacking') {
         DOM.currentAnimation = 'attacking';
@@ -98,40 +115,33 @@ window.addEventListener('keydown', function (event) {
 
 /*----- functions -----*/
 
-startNewGame();
+// startNewGame();
 
 function startNewGame() {
     let score = 0;
     DOM.currentAnimation = 'running'
-
-    for (let i = 1; i < 5; i++) {
-        let bomb = new Bomb(i * 1000);
-        bombs.push(bomb)
-        let img = document.createElement('img');
-        img.style.left = `${bomb.x }px`;
-        img.append(backgroundEl);
-    }
     backgroundscroll()
-    render()
 }
+
+render()
 
 function render() {
     setTimeout(function () {
         //this will render DOM's idle animation
         if (DOM.currentAnimation === 'idle') {
-            domRunnerEl.setAttribute('src', `${DOM.idleAnimation[animationIdx]}`)
+            domRunnerElem.setAttribute('src', `${DOM.idleAnimation[animationIdx]}`)
             animationIdx++
             if (animationIdx === DOM.idleAnimation.length - 1) animationIdx = 0;
         }
         //this will render the run animation
         else if (DOM.currentAnimation === 'running') {
-            domRunnerEl.setAttribute('src', `${DOM.runAnimation[animationIdx]}`)
+            domRunnerElem.setAttribute('src', `${DOM.runAnimation[animationIdx]}`)
             animationIdx++
             if (animationIdx === DOM.runAnimation.length - 1) animationIdx = 0;
         }
         //this will render jump animation
         else if (DOM.currentAnimation === 'jumping') {
-            domRunnerEl.setAttribute('src', `${DOM.jumpAnimation[animationIdx]}`);
+            domRunnerElem.setAttribute('src', `${DOM.jumpAnimation[animationIdx]}`);
             animationIdx++;
             if (animationIdx === DOM.jumpAnimation.length - 1) {
                 animationIdx = 0;
@@ -139,41 +149,48 @@ function render() {
         }
         // this will render attack animation
         if (DOM.currentAnimation === 'attacking') {
-            domRunnerEl.setAttribute('src', `${DOM.attackAnimation[animationIdx]}`);
+            domRunnerElem.setAttribute('src', `${DOM.attackAnimation[animationIdx]}`);
             animationIdx++;
             if (animationIdx === DOM.attackAnimation.length - 1) {
                 DOM.currentAnimation = 'running'
                 animationIdx = 0;
             }
         }
+        // this renders bomb animation 
+        bombElems.forEach(elem => elem.setAttribute('src', `${bombAnimation[BAidx]}`))
+        if (BAidx === 1) BAidx = 0
+        else BAidx++
+
+        if (DOM.x < -5100) {
+            alert(`you've won!!!`)
+            DOM.currentAnimation = 'idle'
+        }
         requestAnimationFrame(render);
-    }, 125)
+    }, 150)
 }
 
-function animateEaseY() {
+function animateJump() {
     if (DOM.y > 350) {
         DOM.y = 350
         DOM.yVelocity = 0
-        domRunnerEl.style.top = `${DOM.y}px`
+        domRunnerElem.style.top = `${DOM.y}px`
         DOM.currentAnimation = 'running'
         return
     } else {
         DOM.yVelocity += .6; // gravity
         DOM.y += DOM.yVelocity;
         DOM.yVelocity *= 0.9; // friction
-        domRunnerEl.style.top = `${DOM.y}px`
-        requestAnimationFrame(animateEaseY);
+        domRunnerElem.style.top = `${DOM.y}px`
+        requestAnimationFrame(animateJump);
     }
 }
 
 function backgroundscroll() {
     setTimeout(() => {
-        if (DOM.x < -5000) {
-            alert(`you've won!!!`)
-            return
-        }
-        DOM.x -= 1;
-        backgroundEl.style.transform = `translateX(${DOM.x}px)`
+
+        DOM.x--;
+        backgroundElem.style.transform = `translateX(${DOM.x}px)`
+        bombs.forEach(bomb => bomb.x--)
         backgroundscroll();
     }, 5);
 }
