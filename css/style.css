@@ -30,10 +30,28 @@ body {
 #DOM-runner {
     width: 120px;
     height: 100px;
-    /* margin: 350px 0 0 100px; */
     position: absolute;
     top: 350px;
     left: 100px;
     z-index: 1;
     opacity: .9;
+    border: solid red 1px;
+}
+
+.laser {
+    position: absolute;
+    border: solid red 1px;
+    height: 75px;
+    width: 100px;
+    top: 375px;
+    left: 125px;
+}
+
+#collision-box {
+    border: solid green 2px;
+    position: absolute;
+    width: 45px;
+    height: 85px;
+    top: 365px;
+    left: 135px;
 }
