@@ -1,5 +1,4 @@
 /*----- constants -----*/
-const BACKGROUNDWIDTH = 5000;
 /*
  collision box for DOM 
     width: 45px;
@@ -10,7 +9,10 @@ const BACKGROUNDWIDTH = 5000;
 const DOM = {
     x: 0,
     y: 350, // value in pixels
+    height: 85,
     yVelocity: 0,
+    innerRange: 135, // left side of DOM
+    outerRange: 180, // right side of DOM
     runAnimation: [
         '../resources/v2.1/Indvidual Sprites/adventurer-run-00-1.3.png',
         '../resources/v2.1/Indvidual Sprites/adventurer-run-01-1.3.png',
@@ -25,6 +27,7 @@ const DOM = {
         '../resources/v2.1/Indvidual Sprites/adventurer-jump-01-1.3.png',
         '../resources/v2.1/Indvidual Sprites/adventurer-jump-02-1.3.png',
         '../resources/v2.1/Indvidual Sprites/adventurer-jump-03-1.3.png',
+        '../resources/v2.1/Indvidual Sprites/adventurer-jump-03-1.3.png',
         '../resources/v2.1/Indvidual Sprites/adventurer-jump-02-1.3.png',
         '../resources/v2.1/Indvidual Sprites/adventurer-jump-01-1.3.png',
     ],
@@ -35,13 +38,13 @@ const DOM = {
         '../resources/v2.1/Indvidual Sprites/adventurer-die-03-1.3.png',
         '../resources/v2.1/Indvidual Sprites/adventurer-die-04-1.3.png',
         '../resources/v2.1/Indvidual Sprites/adventurer-die-05-1.3.png',
-        '../resources/v2.1/Indvidual Sprites/adventurer-die-06-1.3.png'
+        '../resources/v2.1/Indvidual Sprites/adventurer-die-06-1.3.png',
     ],
     attackAnimation: [
         '../resources/v2.1/Indvidual Sprites/adventurer-attack2-02-1.3.png',
         '../resources/v2.1/Indvidual Sprites/adventurer-attack2-03-1.3.png',
         '../resources/v2.1/Indvidual Sprites/adventurer-attack2-04-1.3.png',
-        '../resources/v2.1/Indvidual Sprites/adventurer-attack2-05-1.3.png'
+        '../resources/v2.1/Indvidual Sprites/adventurer-attack2-05-1.3.png',
     ],
     idleAnimation: [
         '../resources/v2.1/Indvidual Sprites/adventurer-idle-00-1.3.png',
@@ -54,7 +57,7 @@ const DOM = {
         '../resources/v2.1/Indvidual Sprites/adventurer-idle-03-1.3.png',
     ],
     collisionDetection: function (object) {
-        if (object.x === this.x && object.y === this.y) {
+        if (this.outerRange > object.x && this.innerRange < (object.x + object.width) && this.y + this.height > 410) { // ready to test collision detection.
             console.log(`collided with ${object}`)
         }
     },
@@ -71,13 +74,14 @@ class Bomb {
     constructor(x) {
         this.x = x;
         this.y = 50;
+        this.width = 50;
     }
 }
 
 /*----- app's (variables) -----*/
 let score;
 let animationIdx = 0;
-let BAidx = 0;
+let BAIdx = 0;
 let bombs = [];
 
 
@@ -157,14 +161,17 @@ function render() {
             }
         }
         // this renders bomb animation 
-        bombElems.forEach(elem => elem.setAttribute('src', `${bombAnimation[BAidx]}`))
-        if (BAidx === 1) BAidx = 0
-        else BAidx++
-
+        bombElems.forEach((elem, idx) => {
+            elem.setAttribute('src', `${bombAnimation[BAIdx]}`)
+            DOM.collisionDetection(bombs[idx]);
+        })
+        if (BAIdx === 1) BAIdx = 0
+        else BAIdx++
         if (DOM.x < -5100) {
             alert(`you've won!!!`)
             DOM.currentAnimation = 'idle'
         }
+
         requestAnimationFrame(render);
     }, 150)
 }
@@ -187,7 +194,6 @@ function animateJump() {
 
 function backgroundscroll() {
     setTimeout(() => {
-
         DOM.x--;
         backgroundElem.style.transform = `translateX(${DOM.x}px)`
         bombs.forEach(bomb => bomb.x--)
