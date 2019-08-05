@@ -62,20 +62,24 @@ const DOM = {
 }
 
 /*----- Classes -----*/
-class Obstacle {
-    constructor(xpos, ypos) {
-        this.x = xpos;
-        this.y = ypos;
+class Bomb {
+    constructor(x) {
+        this.x = x;
+        this.y = 50;
     }
 }
 
-/*----- app's state (variables) -----*/
+
+
+/*----- app's (variables) -----*/
 let score;
 let animationIdx = 0;
+let bombs = [];
 
 /*----- cached element references -----*/
 const backgroundEl = document.getElementById('background');
 const domRunnerEl = document.getElementById('DOM-runner');
+// const container = document.getElementById('viewport');
 
 /*----- event listeners -----*/
 window.addEventListener('keydown', function (event) {
@@ -83,7 +87,7 @@ window.addEventListener('keydown', function (event) {
     if (event.key === 'ArrowUp' && DOM.currentAnimation === 'running') {
         DOM.currentAnimation = 'jumping';
         animationIdx = 1;
-        DOM.yVelocity -= 35;
+        DOM.yVelocity -= 20;
         animateEaseY()
     }
     if (event.code === 'Space' && DOM.currentAnimation !== 'attacking') {
@@ -94,16 +98,22 @@ window.addEventListener('keydown', function (event) {
 
 /*----- functions -----*/
 
-// startNewGame();
+startNewGame();
+
 function startNewGame() {
     let score = 0;
     DOM.currentAnimation = 'running'
+
+    for (let i = 1; i < 5; i++) {
+        let bomb = new Bomb(i * 1000);
+        bombs.push(bomb)
+        let img = document.createElement('img');
+        img.style.left = `${bomb.x }px`;
+        img.append(backgroundEl);
+    }
     backgroundscroll()
     render()
 }
-
-
-// render()
 
 function render() {
     setTimeout(function () {
@@ -148,15 +158,13 @@ function animateEaseY() {
         DOM.currentAnimation = 'running'
         return
     } else {
-        DOM.yVelocity += 1.5; // gravity
+        DOM.yVelocity += .6; // gravity
         DOM.y += DOM.yVelocity;
         DOM.yVelocity *= 0.9; // friction
         domRunnerEl.style.top = `${DOM.y}px`
         requestAnimationFrame(animateEaseY);
     }
 }
-
-// backgroundscroll()
 
 function backgroundscroll() {
     setTimeout(() => {

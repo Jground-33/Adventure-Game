@@ -35,7 +35,7 @@ body {
     left: 100px;
     z-index: 1;
     opacity: .9;
-    border: solid red 1px;
+    /* border: solid red 1px; */
 }
 
 .laser {
@@ -54,4 +54,12 @@ body {
     height: 85px;
     top: 365px;
     left: 135px;
+}
+
+.bomb {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    top: 400px;
+    opacity: .9;
 }
