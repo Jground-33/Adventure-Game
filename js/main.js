@@ -3,6 +3,7 @@ const DOM = {
     x: 0,
     y: 350, // value in pixels
     height: 85,
+    width: 45,
     yVelocity: 0,
     innerRange: 135, // left side of DOM
     outerRange: 180, // right side of DOM
@@ -66,6 +67,12 @@ const bombAnimation = [
     '../resources/bomb0.png',
     '../resources/bomb1.png'
 ]
+
+const laserAnimation = [
+    '../resources/laserBlast0.png',
+    '../resources/laserBlast1.png',
+]
+
 const mosterAnimation = [
     '../resources/big_demon_run_anim_f0.png',
     '../resources/big_demon_run_anim_f1.png',
@@ -97,9 +104,11 @@ class Laser {
         this.y = y;
         this.height = 77;
         this.width = 102;
+        this.relX = x;
     }
-    collisionDetection(monster) {
-        if (this.x + this.width > monster.x && this.x < (object.x + object.width) && this.y + this.height < object.y) {
+    collisionDetection(monster, monsterIndex, laserIndex) {
+        if (this.x + this.width > monster.x && this.x < (monster.x + monster.width) && this.y + this.height < monster.y) {
+            //delete laser from laser elems and delete monster from monster elem;
             console.log('laser hit monster')
         }
     }
@@ -116,7 +125,6 @@ let lasers = [];
 let gameOn = false;
 let readyToStart = false;
 
-
 /*----- cached element references -----*/
 const promtCard = document.getElementById('promt-card');
 const backgroundElem = document.getElementById('background');
@@ -126,6 +134,7 @@ const startBtn = document.getElementById('start');
 const resetBtn = document.getElementById('reset');
 let bombElems;
 let monsterElems;
+let laserElems;
 
 /*----- creates bombs object arrat and bomb Element Node array -----*/
 for (let i = 1; i < 7; i++) {
@@ -169,9 +178,10 @@ window.addEventListener('keydown', function (event) {
         DOM.yVelocity -= 20;
         animateJump();
     }
-    if (event.code === 'Space' && DOM.currentAnimation !== 'attacking' && gameOn) {
+    if (event.code === 'Space' && DOM.currentAnimation !== 'attacking') { // && gameOn
         DOM.currentAnimation = 'attacking';
         animationIdx = 0;
+        spawnLaser()
     }
 });
 
@@ -188,7 +198,6 @@ function init() {
         monster.x = (idx + 1) * 900;
         monster.relX = (idx + 1) * 900;
         monsterElems[idx].style.left = `${monster.relX}px`;
-
     });
     DOM.x = 0;
     backgroundElem.style.transform = `translateX(${DOM.x}px)`;
@@ -205,7 +214,6 @@ function startNewGame() {
     DOM.currentAnimation = 'running';
     backgroundscroll();
 }
-
 
 function render() {
     setTimeout(function () {
@@ -255,14 +263,23 @@ function render() {
         // this renders bomb animation and runs collision detection on bomb objects 
         bombElems.forEach((elem, idx) => {
             elem.setAttribute('src', `${bombAnimation[bombAnimationIdx]}`)
-            DOM.collisionDetection(bombs[idx]);
+            // DOM.collisionDetection(bombs[idx]);
         })
+        //this renders laser animation and runs collision detection on laser vs moster objects;
+        if (lasers.length > 0) {
+            lasers.forEach((laser, laserIdx) => {
+                laserElems[laserIdx].setAttribute('src', `${laserAnimation[bombAnimationIdx]}`);
+                //collision detect monsters 
+                monsters.forEach((monster, monsterIdx) => laser.collisionDetection(monster, monsterIdx, laserIdx));
+                // laser.collisionDetection(bombs[idx]);
+            })
+        }
         bombAnimationIdx === 1 ? bombAnimationIdx = 0 : bombAnimationIdx++;
 
         // this renders monster animation and runs collision detection on monster objects 
         monsterElems.forEach((elem, idx) => {
             elem.setAttribute('src', `${mosterAnimation[monsterAnimationIdx]}`)
-            DOM.collisionDetection(monsters[idx]);
+            // DOM.collisionDetection(monsters[idx]);
         })
         monsterAnimationIdx++;
         if (monsterAnimationIdx > mosterAnimation.length - 1) monsterAnimationIdx = 0;
@@ -302,5 +319,24 @@ function backgroundscroll() {
         monster.relX -= 2;
         monsterElems[idx].style.left = `${monster.relX}px`;
     });
+    lasers.forEach((laser, idx) => {
+        laser.x += 5;
+        laser.relX += 10;
+        laserElems[idx].style.left = `${laser.relX}px`;
+    });
     requestAnimationFrame(backgroundscroll)
+}
+
+
+function spawnLaser() {
+    //spawn laser object, push into lasers array, create DOM element
+    let laser = new Laser(DOM.innerRange + (Math.abs(DOM.x)), DOM.y)
+    let img = document.createElement('img');
+    lasers.push(laser);
+    img.className = 'laser';
+    img.setAttribute('src', '../resources/laserBlast0.png');
+    img.style.left = `${laser.relX}px`;
+    img.style.opacity = `.9`
+    backgroundElem.append(img);
+    laserElems = document.querySelectorAll('.laser');
 }
