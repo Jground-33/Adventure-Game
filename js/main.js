@@ -99,17 +99,20 @@ class Monster {
 }
 
 class Laser {
-    constructor(x, y) {
+    constructor(x, y, relX) {
         this.x = x;
         this.y = y;
         this.height = 77;
-        this.width = 102;
-        this.relX = x;
+        this.width = 104;
+        this.relX = relX;
     }
     collisionDetection(monster, monsterIndex, laserIndex) {
-        if (this.x + this.width > monster.x && this.x < (monster.x + monster.width) && this.y + this.height < monster.y) {
-            //delete laser from laser elems and delete monster from monster elem;
-            console.log('laser hit monster')
+        if (this.x + this.width > monster.x && this.x < (monster.x + monster.width)) { //&& this.y + this.height < monster.y
+            alert('laser hit monster')
+            // laserElems[laserIndex].remove()
+            // monsterElems[monsterIndex].remove()
+            // lasers.splice(laserIndex, 1)
+            // monsters.splice(monsterIndex, 1)
         }
     }
 }
@@ -178,7 +181,7 @@ window.addEventListener('keydown', function (event) {
         DOM.yVelocity -= 20;
         animateJump();
     }
-    if (event.code === 'Space' && DOM.currentAnimation !== 'attacking') { // && gameOn
+    if (event.code === 'Space' && DOM.currentAnimation !== 'attacking' && gameOn) { 
         DOM.currentAnimation = 'attacking';
         animationIdx = 0;
         spawnLaser()
@@ -261,25 +264,25 @@ function render() {
         }
 
         // this renders bomb animation and runs collision detection on bomb objects 
-        bombElems.forEach((elem, idx) => {
-            elem.setAttribute('src', `${bombAnimation[bombAnimationIdx]}`)
-            // DOM.collisionDetection(bombs[idx]);
+        bombs.forEach((bomb, idx) => {
+            bombElems[idx].setAttribute('src', `${bombAnimation[bombAnimationIdx]}`)
+            // DOM.collisionDetection(bomb);
         })
         //this renders laser animation and runs collision detection on laser vs moster objects;
+        laserElems = document.querySelectorAll('.laser')
         if (lasers.length > 0) {
             lasers.forEach((laser, laserIdx) => {
                 laserElems[laserIdx].setAttribute('src', `${laserAnimation[bombAnimationIdx]}`);
-                //collision detect monsters 
                 monsters.forEach((monster, monsterIdx) => laser.collisionDetection(monster, monsterIdx, laserIdx));
-                // laser.collisionDetection(bombs[idx]);
             })
         }
         bombAnimationIdx === 1 ? bombAnimationIdx = 0 : bombAnimationIdx++;
 
         // this renders monster animation and runs collision detection on monster objects 
-        monsterElems.forEach((elem, idx) => {
-            elem.setAttribute('src', `${mosterAnimation[monsterAnimationIdx]}`)
-            // DOM.collisionDetection(monsters[idx]);
+        monsterElems = document.querySelectorAll('.monster')
+        monsters.forEach((monster, idx) => {
+            monsterElems[idx].setAttribute('src', `${mosterAnimation[monsterAnimationIdx]}`)
+            // DOM.collisionDetection(monster);
         })
         monsterAnimationIdx++;
         if (monsterAnimationIdx > mosterAnimation.length - 1) monsterAnimationIdx = 0;
@@ -330,7 +333,7 @@ function backgroundscroll() {
 
 function spawnLaser() {
     //spawn laser object, push into lasers array, create DOM element
-    let laser = new Laser(DOM.innerRange + (Math.abs(DOM.x)), DOM.y)
+    let laser = new Laser(DOM.x + DOM.innerRange, DOM.y, DOM.innerRange + (Math.abs(DOM.x)))
     let img = document.createElement('img');
     lasers.push(laser);
     img.className = 'laser';
