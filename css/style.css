@@ -66,7 +66,6 @@ header {
     left: 100px;
     z-index: 1;
     opacity: .9;
-    /* border: solid red 1px; */
 }
 
 .laser {
@@ -126,6 +125,5 @@ header {
     width: 80px;
     height: 80px;
     top: 365px;
-    /* left: 750px; */
     opacity: .8;
 }
