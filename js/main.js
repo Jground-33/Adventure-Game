@@ -1,11 +1,4 @@
 /*----- constants -----*/
-/*
- collision box for DOM 
-    width: 45px;
-    height: 85px;
-    top: 365px;
-    left: 135px;
-*/
 const DOM = {
     x: 0,
     y: 350, // value in pixels
@@ -57,10 +50,13 @@ const DOM = {
         '../resources/v2.1/Indvidual Sprites/adventurer-idle-03-1.3.png',
     ],
     collisionDetection: function (object) {
-        if (this.outerRange > object.x && this.innerRange < (object.x + object.width) && this.y + this.height > 410) {
+        if (this.outerRange > object.x && this.innerRange < (object.x + object.width) && this.y + this.height > object.top) {
+            console.log(object);
             DOM.currentAnimation = 'died';
-            document.querySelector('body').style.backgroundColor = 'black'
-            startBtn.style.visibility = 'hidden'
+            document.querySelector('body').style.backgroundColor = 'black';
+            promtCard.style.visibility = 'visible';
+            promtCard.style.opacity = '1';
+            startBtn.style.visibility = 'hidden';
         }
     },
     currentAnimation: 'idle', // idle, running, jumping, attacking;
@@ -70,6 +66,12 @@ const bombAnimation = [
     '../resources/bomb0.png',
     '../resources/bomb1.png'
 ]
+const mosterAnimation = [
+    '../resources/big_demon_run_anim_f0.png',
+    '../resources/big_demon_run_anim_f1.png',
+    '../resources/big_demon_run_anim_f2.png',
+    '../resources/big_demon_run_anim_f3.png',
+]
 
 /*----- Classes -----*/
 class Bomb {
@@ -77,6 +79,16 @@ class Bomb {
         this.x = x;
         this.y = 50;
         this.width = 50;
+        this.top = 410
+    }
+}
+
+class Monster {
+    constructor(x) {
+        this.x = x;
+        this.y = 80;
+        this.width = 60;
+        this.top = 365;
     }
 }
 
@@ -84,87 +96,125 @@ class Bomb {
 let score;
 let animationIdx = 0;
 let bombAnimationIdx = 0;
+let monsterAnimationIdx = 0;
 let bombs = [];
+let monsters = [];
 let gameOn = false;
+let readyToStart = false;
+
 
 /*----- cached element references -----*/
+const promtCard = document.getElementById('promt-card');
 const backgroundElem = document.getElementById('background');
 const domRunnerElem = document.getElementById('DOM-runner');
 const viewportElem = document.getElementById('viewport');
 const startBtn = document.getElementById('start');
+const resetBtn = document.getElementById('reset');
 let bombElems;
+let monsterElems;
+
+/*----- creates bombs object arrat and bomb Element Node array -----*/
+for (let i = 1; i < 7; i++) {
+    let bomb = new Bomb(i * 750);
+    let img = document.createElement('img');
+    bombs.push(bomb);
+    img.className = 'bomb';
+    img.setAttribute('src', '../resources/bomb0.png');
+    img.style.left = `${bomb.x}px`;
+    backgroundElem.append(img);
+}
+bombElems = document.querySelectorAll('.bomb');
+
+for (let i = 1; i < 7; i++) {
+    let monster = new Monster(i * 1000);
+    let img = document.createElement('img');
+    monsters.push(monster);
+    img.className = 'monster';
+    img.setAttribute('src', '../resources/big_demon_run_anim_f0.png');
+    img.style.left = `${monster.x}px`;
+    backgroundElem.append(img);
+}
+monsterElems = document.querySelectorAll('.monster');
+console.log(monsterElems)
 
 
 /*----- event listeners -----*/
+startBtn.addEventListener('click', () => {
+    if (readyToStart) startNewGame();
+});
+
+resetBtn.addEventListener('click', () => {
+    promtCard.style.visibility = 'hidden';
+    promtCard.style.opacity = '0';
+    if (!readyToStart) init();
+});
+
 window.addEventListener('keydown', function (event) {
-    if(event.code === 'Space') event.preventDefault();
-    if (event.key === 'ArrowUp' && DOM.currentAnimation === 'running') {
+    if (event.code === 'Space') event.preventDefault();
+    if (event.key === 'ArrowUp' && DOM.currentAnimation === 'running' && gameOn) {
         DOM.currentAnimation = 'jumping';
         animationIdx = 1;
         DOM.yVelocity -= 20;
-        animateJump()
+        animateJump();
     }
-    if (event.code === 'Space' && DOM.currentAnimation !== 'attacking') {
+    if (event.code === 'Space' && DOM.currentAnimation !== 'attacking' && gameOn) {
         DOM.currentAnimation = 'attacking';
         animationIdx = 0;
     }
-})
+});
 
-startBtn.addEventListener('click', (event) => {
-    if (gameOn) startNewGame()
-})
 
 /*----- functions -----*/
-
 init();
 
+
 function init() {
+    // initialises background color and start button visibility after death scene
+    document.querySelector('body').style.backgroundColor = 'gray'
+    startBtn.style.visibility = 'visible'
+    // update the x position of runner, bombs, mosters, and the background Elem
+    bombs.forEach((bomb, idx) => bomb.x = (idx + 1) * 750);
+    monsters.forEach((monster, idx) => monster.x = (idx + 1) * 1000);
     DOM.x = 0;
-    // creates Bombs and bomb elements 
-    for (let i = 1; i < 7; i++) {
-        let bomb = new Bomb(i * 750);
-        let img = document.createElement('img');
-        bombs.push(bomb)
-        img.className = 'bomb'
-        img.setAttribute('src', '../resources/bomb0.png')
-        img.style.left = `${bomb.x}px`;
-        backgroundElem.append(img)
-    }
-    bombElems = document.querySelectorAll('.bomb');
+    backgroundElem.style.transform = `translateX(${DOM.x}px)`;
+    // initializes score, sets animation to idle and updates ready to start. 
     score = 0;
-    gameOn = true;
+    DOM.currentAnimation = 'idle';
+    readyToStart = true;
+    render();
 }
 
 function startNewGame() {
-    DOM.currentAnimation = 'running'
-    backgroundscroll()
+    gameOn = true;
+    animationIdx = 0;
+    DOM.currentAnimation = 'running';
+    backgroundscroll();
 }
 
-
-render()
 
 function render() {
     setTimeout(function () {
         //this will render DOM's idle animation
         if (DOM.currentAnimation === 'idle') {
-            domRunnerElem.setAttribute('src', `${DOM.idleAnimation[animationIdx]}`)
-            animationIdx++
+            domRunnerElem.setAttribute('src', `${DOM.idleAnimation[animationIdx]}`);
+            animationIdx++;
             if (animationIdx === DOM.idleAnimation.length - 1) animationIdx = 0;
         }
+
         //this will render the run animation
         else if (DOM.currentAnimation === 'running') {
-            domRunnerElem.setAttribute('src', `${DOM.runAnimation[animationIdx]}`)
+            domRunnerElem.setAttribute('src', `${DOM.runAnimation[animationIdx]}`);
             animationIdx++
             if (animationIdx === DOM.runAnimation.length - 1) animationIdx = 0;
         }
+
         //this will render jump animation
         else if (DOM.currentAnimation === 'jumping') {
             domRunnerElem.setAttribute('src', `${DOM.jumpAnimation[animationIdx]}`);
             animationIdx++;
-            if (animationIdx === DOM.jumpAnimation.length - 1) {
-                animationIdx = 0;
-            }
+            if (animationIdx === DOM.jumpAnimation.length - 1) animationIdx = 0;
         }
+
         // this will render attack animation
         if (DOM.currentAnimation === 'attacking') {
             domRunnerElem.setAttribute('src', `${DOM.attackAnimation[animationIdx]}`);
@@ -174,27 +224,39 @@ function render() {
                 animationIdx = 0;
             }
         }
+
         // renders death animation
         if (DOM.currentAnimation === 'died') {
             domRunnerElem.setAttribute('src', `${DOM.dieAnimation[animationIdx]}`);
             animationIdx++;
             if (animationIdx === DOM.dieAnimation.length - 1) {
+                animationIdx = 0;
                 gameOn = false;
+                readyToStart = false;
                 return;
             }
         }
-        // this renders bomb animation 
+
+        // this renders bomb animation and runs collision detection on bomb objects 
         bombElems.forEach((elem, idx) => {
             elem.setAttribute('src', `${bombAnimation[bombAnimationIdx]}`)
             DOM.collisionDetection(bombs[idx]);
         })
-        if (bombAnimationIdx === 1) bombAnimationIdx = 0
-        else bombAnimationIdx++
+        bombAnimationIdx === 1 ? bombAnimationIdx = 0 : bombAnimationIdx++;
+
+        // this renders monster animation and runs collision detection on monster objects 
+        monsterElems.forEach((elem, idx) => {
+            elem.setAttribute('src', `${mosterAnimation[monsterAnimationIdx]}`)
+            DOM.collisionDetection(monsters[idx]);
+        })
+        monsterAnimationIdx++;
+        if (monsterAnimationIdx > mosterAnimation.length - 1) monsterAnimationIdx = 0;
+
+        // win case 
         if (DOM.x < -5100) {
             alert(`you've won!!!`)
             DOM.currentAnimation = 'idle'
         }
-
         requestAnimationFrame(render);
     }, 150)
 }
@@ -217,8 +279,9 @@ function animateJump() {
 
 function backgroundscroll() {
     if (DOM.currentAnimation === 'died') return;
-    DOM.x -= 4
+    DOM.x -= 5
     backgroundElem.style.transform = `translateX(${DOM.x}px)`
-    bombs.forEach(bomb => bomb.x -= 4)
-    requestAnimationFrame(backgroundscroll)
+    bombs.forEach(bomb => bomb.x -= 5)
+    monsters.forEach( monster => monster.x -= 5);
+requestAnimationFrame(backgroundscroll)
 }
