@@ -6,46 +6,46 @@ const DOM = {
     width: 45,
     yVelocity: 0,
     runAnimation: [
-        '../resources/v2.1/Indvidual Sprites/adventurer-run-00-1.3.png',
-        '../resources/v2.1/Indvidual Sprites/adventurer-run-01-1.3.png',
-        '../resources/v2.1/Indvidual Sprites/adventurer-run-02-1.3.png',
-        '../resources/v2.1/Indvidual Sprites/adventurer-run-03-1.3.png',
-        '../resources/v2.1/Indvidual Sprites/adventurer-run-04-1.3.png',
-        '../resources/v2.1/Indvidual Sprites/adventurer-run-05-1.3.png',
-        '../resources/v2.1/Indvidual Sprites/adventurer-run-04-1.3.png',
+        '../assets/v2.1/Indvidual Sprites/adventurer-run-00-1.3.png',
+        '../assets/v2.1/Indvidual Sprites/adventurer-run-01-1.3.png',
+        '../assets/v2.1/Indvidual Sprites/adventurer-run-02-1.3.png',
+        '../assets/v2.1/Indvidual Sprites/adventurer-run-03-1.3.png',
+        '../assets/v2.1/Indvidual Sprites/adventurer-run-04-1.3.png',
+        '../assets/v2.1/Indvidual Sprites/adventurer-run-05-1.3.png',
+        '../assets/v2.1/Indvidual Sprites/adventurer-run-04-1.3.png',
     ],
     jumpAnimation: [
-        '../resources/v2.1/Indvidual Sprites/adventurer-jump-00-1.3.png',
-        '../resources/v2.1/Indvidual Sprites/adventurer-jump-01-1.3.png',
-        '../resources/v2.1/Indvidual Sprites/adventurer-jump-02-1.3.png',
-        '../resources/v2.1/Indvidual Sprites/adventurer-jump-03-1.3.png',
-        '../resources/v2.1/Indvidual Sprites/adventurer-jump-03-1.3.png',
-        '../resources/v2.1/Indvidual Sprites/adventurer-jump-02-1.3.png',
-        '../resources/v2.1/Indvidual Sprites/adventurer-jump-01-1.3.png',
+        '../assets/v2.1/Indvidual Sprites/adventurer-jump-00-1.3.png',
+        '../assets/v2.1/Indvidual Sprites/adventurer-jump-01-1.3.png',
+        '../assets/v2.1/Indvidual Sprites/adventurer-jump-02-1.3.png',
+        '../assets/v2.1/Indvidual Sprites/adventurer-jump-03-1.3.png',
+        '../assets/v2.1/Indvidual Sprites/adventurer-jump-03-1.3.png',
+        '../assets/v2.1/Indvidual Sprites/adventurer-jump-02-1.3.png',
+        '../assets/v2.1/Indvidual Sprites/adventurer-jump-01-1.3.png',
     ],
     dieAnimation: [
-        '../resources/v2.1/Indvidual Sprites/adventurer-die-00-1.3.png',
-        '../resources/v2.1/Indvidual Sprites/adventurer-die-01-1.3.png',
-        '../resources/v2.1/Indvidual Sprites/adventurer-die-02-1.3.png',
-        '../resources/v2.1/Indvidual Sprites/adventurer-die-03-1.3.png',
-        '../resources/v2.1/Indvidual Sprites/adventurer-die-04-1.3.png',
-        '../resources/v2.1/Indvidual Sprites/adventurer-die-05-1.3.png',
-        '../resources/v2.1/Indvidual Sprites/adventurer-die-06-1.3.png',
+        '../assets/v2.1/Indvidual Sprites/adventurer-die-00-1.3.png',
+        '../assets/v2.1/Indvidual Sprites/adventurer-die-01-1.3.png',
+        '../assets/v2.1/Indvidual Sprites/adventurer-die-02-1.3.png',
+        '../assets/v2.1/Indvidual Sprites/adventurer-die-03-1.3.png',
+        '../assets/v2.1/Indvidual Sprites/adventurer-die-04-1.3.png',
+        '../assets/v2.1/Indvidual Sprites/adventurer-die-05-1.3.png',
+        '../assets/v2.1/Indvidual Sprites/adventurer-die-06-1.3.png',
     ],
     attackAnimation: [
-        '../resources/v2.1/Indvidual Sprites/adventurer-attack2-03-1.3.png',
-        '../resources/v2.1/Indvidual Sprites/adventurer-attack2-04-1.3.png',
-        '../resources/v2.1/Indvidual Sprites/adventurer-attack2-05-1.3.png',
+        '../assets/v2.1/Indvidual Sprites/adventurer-attack2-03-1.3.png',
+        '../assets/v2.1/Indvidual Sprites/adventurer-attack2-04-1.3.png',
+        '../assets/v2.1/Indvidual Sprites/adventurer-attack2-05-1.3.png',
     ],
     idleAnimation: [
-        '../resources/v2.1/Indvidual Sprites/adventurer-idle-00-1.3.png',
-        '../resources/v2.1/Indvidual Sprites/adventurer-idle-00-1.3.png',
-        '../resources/v2.1/Indvidual Sprites/adventurer-idle-01-1.3.png',
-        '../resources/v2.1/Indvidual Sprites/adventurer-idle-01-1.3.png',
-        '../resources/v2.1/Indvidual Sprites/adventurer-idle-02-1.3.png',
-        '../resources/v2.1/Indvidual Sprites/adventurer-idle-02-1.3.png',
-        '../resources/v2.1/Indvidual Sprites/adventurer-idle-03-1.3.png',
-        '../resources/v2.1/Indvidual Sprites/adventurer-idle-03-1.3.png',
+        '../assets/v2.1/Indvidual Sprites/adventurer-idle-00-1.3.png',
+        '../assets/v2.1/Indvidual Sprites/adventurer-idle-00-1.3.png',
+        '../assets/v2.1/Indvidual Sprites/adventurer-idle-01-1.3.png',
+        '../assets/v2.1/Indvidual Sprites/adventurer-idle-01-1.3.png',
+        '../assets/v2.1/Indvidual Sprites/adventurer-idle-02-1.3.png',
+        '../assets/v2.1/Indvidual Sprites/adventurer-idle-02-1.3.png',
+        '../assets/v2.1/Indvidual Sprites/adventurer-idle-03-1.3.png',
+        '../assets/v2.1/Indvidual Sprites/adventurer-idle-03-1.3.png',
     ],
     collisionDetection: function (object) {
         if (this.x + this.width > object.x && this.x < (object.x + object.width) && this.y + this.height > object.y) {
@@ -61,20 +61,20 @@ const DOM = {
 }
 
 const bombAnimation = [
-    '../resources/bomb0.png',
-    '../resources/bomb1.png'
+    '../assets/bomb0.png',
+    '../assets/bomb1.png'
 ]
 
 const laserAnimation = [
-    '../resources/laserBlast0.png',
-    '../resources/laserBlast1.png',
+    '../assets/laserBlast0.png',
+    '../assets/laserBlast1.png',
 ]
 
 const mosterAnimation = [
-    '../resources/big_demon_run_anim_f0.png',
-    '../resources/big_demon_run_anim_f1.png',
-    '../resources/big_demon_run_anim_f2.png',
-    '../resources/big_demon_run_anim_f3.png',
+    '../assets/big_demon_run_anim_f0.png',
+    '../assets/big_demon_run_anim_f1.png',
+    '../assets/big_demon_run_anim_f2.png',
+    '../assets/big_demon_run_anim_f3.png',
 ]
 
 /*----- Classes -----*/
@@ -335,7 +335,7 @@ function createBombs(numBombs) {
         let img = document.createElement('img');
         bombs.push(bomb);
         img.className = 'bomb';
-        img.setAttribute('src', '../resources/bomb0.png');
+        img.setAttribute('src', '../assets/bomb0.png');
         img.style.left = `${bomb.x}px`;
         backgroundElem.append(img);
     }
@@ -348,7 +348,7 @@ function createMonsters(numMonsters) {
         let img = document.createElement('img');
         monsters.push(monster);
         img.className = 'monster';
-        img.setAttribute('src', '../resources/big_demon_run_anim_f0.png');
+        img.setAttribute('src', '../assets/big_demon_run_anim_f0.png');
         img.style.left = `${monster.x}px`;
         backgroundElem.append(img);
     }
@@ -362,7 +362,7 @@ function spawnLaser() {
         let img = document.createElement('img');
         lasers.push(laser);
         img.className = 'laser';
-        img.setAttribute('src', '../resources/laserBlast0.png');
+        img.setAttribute('src', '../assets/laserBlast0.png');
         img.style.top = `${laser.y + 25}px`
         img.style.left = `${laser.x}px`;
         img.style.opacity = `.9`

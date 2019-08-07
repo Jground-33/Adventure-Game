@@ -51,7 +51,7 @@ header {
 }
 
 #background {
-    background: url("../resources/Free Pixel Art Forest/Preview/Background.png");
+    background: url("../assets/Free Pixel Art Forest/Preview/Background.png");
     background-position-y: -1080px;
     background-repeat: repeat;
     width: 5000px;
