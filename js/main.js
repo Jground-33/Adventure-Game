@@ -6,46 +6,46 @@ const DOM = {
     width: 45,
     yVelocity: 0,
     runAnimation: [
-        'assets/v2.1/Indvidual-Sprites/adventurer-run-00-1.3.png',
-        'assets/v2.1/Indvidual-Sprites/adventurer-run-01-1.3.png',
-        'assets/v2.1/Indvidual-Sprites/adventurer-run-02-1.3.png',
-        'assets/v2.1/Indvidual-Sprites/adventurer-run-03-1.3.png',
-        'assets/v2.1/Indvidual-Sprites/adventurer-run-04-1.3.png',
-        'assets/v2.1/Indvidual-Sprites/adventurer-run-05-1.3.png',
-        'assets/v2.1/Indvidual-Sprites/adventurer-run-04-1.3.png',
+        './assets/v2.1/Indvidual-Sprites/adventurer-run-00-1.3.png',
+        './assets/v2.1/Indvidual-Sprites/adventurer-run-01-1.3.png',
+        './assets/v2.1/Indvidual-Sprites/adventurer-run-02-1.3.png',
+        './assets/v2.1/Indvidual-Sprites/adventurer-run-03-1.3.png',
+        './assets/v2.1/Indvidual-Sprites/adventurer-run-04-1.3.png',
+        './assets/v2.1/Indvidual-Sprites/adventurer-run-05-1.3.png',
+        './assets/v2.1/Indvidual-Sprites/adventurer-run-04-1.3.png',
     ],
     jumpAnimation: [
-        'assets/v2.1/Indvidual-Sprites/adventurer-jump-00-1.3.png',
-        'assets/v2.1/Indvidual-Sprites/adventurer-jump-01-1.3.png',
-        'assets/v2.1/Indvidual-Sprites/adventurer-jump-02-1.3.png',
-        'assets/v2.1/Indvidual-Sprites/adventurer-jump-03-1.3.png',
-        'assets/v2.1/Indvidual-Sprites/adventurer-jump-03-1.3.png',
-        'assets/v2.1/Indvidual-Sprites/adventurer-jump-02-1.3.png',
-        'assets/v2.1/Indvidual-Sprites/adventurer-jump-01-1.3.png',
+        './assets/v2.1/Indvidual-Sprites/adventurer-jump-00-1.3.png',
+        './assets/v2.1/Indvidual-Sprites/adventurer-jump-01-1.3.png',
+        './assets/v2.1/Indvidual-Sprites/adventurer-jump-02-1.3.png',
+        './assets/v2.1/Indvidual-Sprites/adventurer-jump-03-1.3.png',
+        './assets/v2.1/Indvidual-Sprites/adventurer-jump-03-1.3.png',
+        './assets/v2.1/Indvidual-Sprites/adventurer-jump-02-1.3.png',
+        './assets/v2.1/Indvidual-Sprites/adventurer-jump-01-1.3.png',
     ],
     dieAnimation: [
-        'assets/v2.1/Indvidual-Sprites/adventurer-die-00-1.3.png',
-        'assets/v2.1/Indvidual-Sprites/adventurer-die-01-1.3.png',
-        'assets/v2.1/Indvidual-Sprites/adventurer-die-02-1.3.png',
-        'assets/v2.1/Indvidual-Sprites/adventurer-die-03-1.3.png',
-        'assets/v2.1/Indvidual-Sprites/adventurer-die-04-1.3.png',
-        'assets/v2.1/Indvidual-Sprites/adventurer-die-05-1.3.png',
-        'assets/v2.1/Indvidual-Sprites/adventurer-die-06-1.3.png',
+        './assets/v2.1/Indvidual-Sprites/adventurer-die-00-1.3.png',
+        './assets/v2.1/Indvidual-Sprites/adventurer-die-01-1.3.png',
+        './assets/v2.1/Indvidual-Sprites/adventurer-die-02-1.3.png',
+        './assets/v2.1/Indvidual-Sprites/adventurer-die-03-1.3.png',
+        './assets/v2.1/Indvidual-Sprites/adventurer-die-04-1.3.png',
+        './assets/v2.1/Indvidual-Sprites/adventurer-die-05-1.3.png',
+        './assets/v2.1/Indvidual-Sprites/adventurer-die-06-1.3.png',
     ],
     attackAnimation: [
-        'assets/v2.1/Indvidual-Sprites/adventurer-attack2-03-1.3.png',
-        'assets/v2.1/Indvidual-Sprites/adventurer-attack2-04-1.3.png',
-        'assets/v2.1/Indvidual-Sprites/adventurer-attack2-05-1.3.png',
+        './assets/v2.1/Indvidual-Sprites/adventurer-attack2-03-1.3.png',
+        './assets/v2.1/Indvidual-Sprites/adventurer-attack2-04-1.3.png',
+        './assets/v2.1/Indvidual-Sprites/adventurer-attack2-05-1.3.png',
     ],
     idleAnimation: [
-        'assets/v2.1/Indvidual-Sprites/adventurer-idle-00-1.3.png',
-        'assets/v2.1/Indvidual-Sprites/adventurer-idle-00-1.3.png',
-        'assets/v2.1/Indvidual-Sprites/adventurer-idle-01-1.3.png',
-        'assets/v2.1/Indvidual-Sprites/adventurer-idle-01-1.3.png',
-        'assets/v2.1/Indvidual-Sprites/adventurer-idle-02-1.3.png',
-        'assets/v2.1/Indvidual-Sprites/adventurer-idle-02-1.3.png',
-        'assets/v2.1/Indvidual-Sprites/adventurer-idle-03-1.3.png',
-        'assets/v2.1/Indvidual-Sprites/adventurer-idle-03-1.3.png',
+        './assets/v2.1/Indvidual-Sprites/adventurer-idle-00-1.3.png',
+        './assets/v2.1/Indvidual-Sprites/adventurer-idle-00-1.3.png',
+        './assets/v2.1/Indvidual-Sprites/adventurer-idle-01-1.3.png',
+        './assets/v2.1/Indvidual-Sprites/adventurer-idle-01-1.3.png',
+        './assets/v2.1/Indvidual-Sprites/adventurer-idle-02-1.3.png',
+        './assets/v2.1/Indvidual-Sprites/adventurer-idle-02-1.3.png',
+        './assets/v2.1/Indvidual-Sprites/adventurer-idle-03-1.3.png',
+        './assets/v2.1/Indvidual-Sprites/adventurer-idle-03-1.3.png',
     ],
     collisionDetection: function (object) {
         if (this.x + this.width > object.x && this.x < (object.x + object.width) && this.y + this.height > object.y) {
@@ -61,20 +61,20 @@ const DOM = {
 }
 
 const bombAnimation = [
-    'assets/bomb0.png',
-    'assets/bomb1.png'
+    './assets/bomb0.png',
+    './assets/bomb1.png'
 ]
 
 const laserAnimation = [
-    'assets/laserBlast0.png',
-    'assets/laserBlast1.png',
+    './assets/laserBlast0.png',
+    './assets/laserBlast1.png',
 ]
 
 const mosterAnimation = [
-    'assets/big_demon_run_anim_f0.png',
-    'assets/big_demon_run_anim_f1.png',
-    'assets/big_demon_run_anim_f2.png',
-    'assets/big_demon_run_anim_f3.png',
+    './assets/big_demon_run_anim_f0.png',
+    './assets/big_demon_run_anim_f1.png',
+    './assets/big_demon_run_anim_f2.png',
+    './assets/big_demon_run_anim_f3.png',
 ]
 
 /*----- Classes -----*/
