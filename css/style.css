@@ -133,6 +133,15 @@ header {
     opacity: .8;
 }
 
+.coin {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    top: 250px;
+    left: 800px;
+    opacity: .9;
+}
+
 #overlay {
     display: flex;
     justify-content: center;
@@ -166,4 +175,9 @@ header {
     background-color: #111111;
     width: 90%;
     height: 70%;
+}
+
+#final-score {
+    color: white;
+    margin-bottom: 30px;
 }

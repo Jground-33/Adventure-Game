@@ -70,6 +70,13 @@ const laserAnimation = [
     './assets/laserBlast1.png',
 ]
 
+const coinAnimation = [
+    './assets/coin_anim_f0.png',
+    './assets/coin_anim_f1.png',
+    './assets/coin_anim_f2.png',
+    './assets/coin_anim_f3.png',
+]
+
 const mosterAnimation = [
     './assets/big_demon_run_anim_f0.png',
     './assets/big_demon_run_anim_f1.png',
@@ -108,14 +115,31 @@ class Laser {
             monsterElems[monsterIndex].remove()
             lasers.splice(laserIndex, 1)
             monsters.splice(monsterIndex, 1)
-            score += 100;
+            score += 500;
             scoreElem.textContent = `Score:${formatWithPadding(score)}`
         }
     }
 }
 
+class Coin {
+    constructor(x) {
+        this.x = x;
+        this.y = 275;
+        this.height = 20;
+        this.width = 20;
+    }
+    collisionDetection(runner, coinIndex) {
+        if (runner.x + runner.width > this.x && runner.x < (this.x + this.width) && runner.y + runner.height > this.y && runner.y < this.y + this.height) {
+            score += 100;
+            scoreElem.textContent = `Score:${formatWithPadding(score)}`
+            coins.splice(coinIndex, 1)
+            coinElems[coinIndex].remove();
+        }
+    }
+}
+
 /*----- app's (variables) -----*/
-let score, bombs, monsters;
+let score, bombs, monsters, coins;
 let bombDistance = 800;
 let monsterDistance = 820;
 let animationIdx = 0;
@@ -138,7 +162,7 @@ const promtCard = document.getElementById('promt-card');
 const promtElem = document.getElementById('promt');
 const resetBtn = document.getElementById('reset');
 const instructionsCard = document.getElementById('instruction-card');
-
+let coinElems = [];
 let bombElems = [];
 let monsterElems = [];
 let laserElems;
@@ -199,17 +223,21 @@ function init() {
     bodyElem.style.backgroundColor = 'gray';
     startBtn.style.visibility = 'visible';
     instructionsBtn.style.visibility = 'visible';
+    //resetting score to 0
     score = 0;
     scoreElem.textContent = `Score:${formatWithPadding(score)}`
-    // update the x position of runner, bombs, mosters, and the background Elem
+    // update the x position of runner, bombs, mosters, coins, and the background Elem
     backgroundX = 0;
     backgroundElem.style.transform = `translateX(${backgroundX}px)`;
-    if (bombElems.length > 0) bombElems.forEach(elem => elem.remove());
-    if (monsterElems.length > 0) monsterElems.forEach(elem => elem.remove());
+    if (bombElems.length > 0) bombElems.forEach(bomb => bomb.remove());
+    if (monsterElems.length > 0) monsterElems.forEach(monster => monster.remove());
+    if (coinElems.length > 0) coinElems.forEach(coin => coin.remove());
     bombs = [];
     monsters = [];
+    coins = [];
     createBombs(6);
     createMonsters(7);
+    createCoins(12)
     // initializes score, sets animation to idle and updates ready to start. 
     DOM.currentAnimation = 'idle';
     readyToStart = true; // might not need this bool
@@ -273,7 +301,7 @@ function render() {
         // this renders bomb animation and runs collision detection on bomb objects 
         bombs.forEach((bomb, idx) => {
             bombElems[idx].setAttribute('src', `${bombAnimation[bombAnimationIdx]}`);
-            DOM.collisionDetection(bomb); //////////////////////////////////////////////////BOMB COLLISION///////////////////////////////////////////////////////////////
+            DOM.collisionDetection(bomb); /////////////////////////////////////////////////////////////BOMB COLLISION///////////////////////////////////////////////////////////////
         })
         //this renders laser animation and runs collision detection on laser vs moster objects;
         laserElems = document.querySelectorAll('.laser');
@@ -290,11 +318,18 @@ function render() {
         bombAnimationIdx === 1 ? bombAnimationIdx = 0 : bombAnimationIdx++;
 
         // this renders monster animation and runs collision detection on monster objects 
-        monsterElems = document.querySelectorAll('.monster')
+        monsterElems = document.querySelectorAll('.monster');
         monsters.forEach((monster, idx) => {
-            monsterElems[idx].setAttribute('src', `${mosterAnimation[monsterAnimationIdx]}`)
-            DOM.collisionDetection(monster); /////////////////////////////////////////////////////MONSTER COLLISION////////////////////////////////////////////////////////////
+            monsterElems[idx].setAttribute('src', `${mosterAnimation[monsterAnimationIdx]}`);
+            DOM.collisionDetection(monster); ///////////////////////////////////////////////////////////MONSTER COLLISION////////////////////////////////////////////////////////////
         })
+        // this renders coin animation
+        coinElems = document.querySelectorAll('.coin');
+        coins.forEach((coin, coinIdx) => {
+            coinElems[coinIdx].setAttribute('src', `${coinAnimation[monsterAnimationIdx]}`);
+            coin.collisionDetection(DOM, coinIdx);
+        })
+
         monsterAnimationIdx++;
         if (monsterAnimationIdx > mosterAnimation.length - 1) monsterAnimationIdx = 0;
 
@@ -304,7 +339,7 @@ function render() {
             return;
         }
         requestAnimationFrame(render);
-    }, 150)
+    }, 125)
 }
 
 function animateJump() {
@@ -345,7 +380,7 @@ function createBombs(numBombs) {
         let img = document.createElement('img');
         bombs.push(bomb);
         img.className = 'bomb';
-        img.setAttribute('src', '../assets/bomb0.png');
+        img.setAttribute('src', './assets/bomb0.png');
         img.style.left = `${bomb.x}px`;
         backgroundElem.append(img);
     }
@@ -358,7 +393,7 @@ function createMonsters(numMonsters) {
         let img = document.createElement('img');
         monsters.push(monster);
         img.className = 'monster';
-        img.setAttribute('src', '../assets/big_demon_run_anim_f0.png');
+        img.setAttribute('src', './assets/big_demon_run_anim_f0.png');
         img.style.left = `${monster.x}px`;
         backgroundElem.append(img);
     }
@@ -372,7 +407,7 @@ function spawnLaser() {
         let img = document.createElement('img');
         lasers.push(laser);
         img.className = 'laser';
-        img.setAttribute('src', '../assets/laserBlast0.png');
+        img.setAttribute('src', './assets/laserBlast0.png');
         img.style.top = `${laser.y + 25}px`
         img.style.left = `${laser.x}px`;
         img.style.opacity = `.9`
@@ -380,6 +415,44 @@ function spawnLaser() {
         laserElems = document.querySelectorAll('.laser');
     }, 100)
 }
+
+function createCoins(numCoins, ) {
+    let coinOffset = -30;
+    for (let i = 1; i <= numCoins; i++) {
+        let coin = new Coin(i * bombDistance / 2 + coinOffset)
+        let img = document.createElement('img');
+        coins.push(coin);
+        img.className = 'coin';
+        img.setAttribute('src', './assets/coin_anim_f0.png');
+        img.style.top = `${coin.y + 25}px`
+        img.style.left = `${coin.x}px`;
+        backgroundElem.append(img);
+    }
+    coinOffset = 0;
+    for (let i = 1; i <= numCoins; i++) {
+        let coin = new Coin(i * bombDistance / 2 + coinOffset)
+        let img = document.createElement('img');
+        coins.push(coin);
+        img.className = 'coin';
+        img.setAttribute('src', './assets/coin_anim_f0.png');
+        img.style.top = `${coin.y + 25}px`
+        img.style.left = `${coin.x}px`;
+        backgroundElem.append(img);
+    }
+    coinOffset = 30;
+    for (let i = 1; i <= numCoins; i++) {
+        let coin = new Coin(i * bombDistance / 2 + coinOffset)
+        let img = document.createElement('img');
+        coins.push(coin);
+        img.className = 'coin';
+        img.setAttribute('src', './assets/coin_anim_f0.png');
+        img.style.top = `${coin.y + 25}px`
+        img.style.left = `${coin.x}px`;
+        backgroundElem.append(img);
+    }
+    coinElems = document.querySelectorAll('.coin');
+}
+
 
 function renderWin() {
     DOM.x = 145;
@@ -392,12 +465,13 @@ function renderWin() {
     resetBtn.textContent = 'PLAY AGAIN?';
     promtCard.style.opacity = '1';
     DOM.currentAnimation = 'idle'
+    document.getElementById('final-score').textContent = `FINAL SCORE: ${formatWithPadding(score)}`
     gameOn = false;
     readyToStart = false;
 }
 
 function formatWithPadding(num, char = '0', num2 = 5) {
     let numArray = num.toString().split('');
-    while(numArray.length < num2) numArray.unshift(char)
+    while (numArray.length < num2) numArray.unshift(char)
     return numArray.join('')
 }
