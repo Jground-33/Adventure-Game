@@ -51,7 +51,7 @@ const DOM = {
         if (this.x + this.width > object.x && this.x < (object.x + object.width) && this.y + this.height > object.y) {
             console.log(object);
             DOM.currentAnimation = 'died';
-            document.querySelector('body').style.backgroundColor = 'black';
+            bodyElem.style.backgroundColor = 'black';
             promtCard.style.visibility = 'visible';
             promtCard.style.opacity = '1';
             startBtn.style.visibility = 'hidden';
@@ -113,28 +113,27 @@ class Laser {
 }
 
 /*----- app's (variables) -----*/
-let score;
+let score, bombs, monsters;
 let bombDistance = 700;
 let monsterDistance = 700;
 let animationIdx = 0;
 let bombAnimationIdx = 0;
 let monsterAnimationIdx = 0;
 let backgroundX = 0;
-let bombs = [];
-let monsters = [];
 let lasers = [];
 let gameOn = false;
 let readyToStart = false; // might not need this bool
 
 /*----- cached element references -----*/
-const promtCard = document.getElementById('promt-card');
+const bodyElem = document.querySelector('body');
+const startBtn = document.getElementById('start');
 const backgroundElem = document.getElementById('background');
 const domRunnerElem = document.getElementById('DOM-runner');
-// const viewportElem = document.getElementById('viewport');
-const startBtn = document.getElementById('start');
+const promtCard = document.getElementById('promt-card');
+const promtElem = document.getElementById('promt');
 const resetBtn = document.getElementById('reset');
-let bombElems;
-let monsterElems;
+let bombElems = [];
+let monsterElems = [];
 let laserElems;
 
 
@@ -160,29 +159,29 @@ window.addEventListener('keydown', function (event) {
     if (event.code === 'Space' && DOM.currentAnimation !== 'attacking' && gameOn) {
         DOM.currentAnimation = 'attacking';
         animationIdx = 0;
-        spawnLaser()
+        spawnLaser();
     }
 });
 
 /*----- functions -----*/
 
-createBombs(8); 
-createMonsters(8);  
+
 init();
 
 function init() {
-    // initialises background color and start button visibility after death scene
-    document.querySelector('body').style.backgroundColor = 'gray'
-    startBtn.style.visibility = 'visible'
-    // update the x position of runner, bombs, mosters, and the background Elem
-    bombs.forEach((bomb, idx) => bomb.x = (idx + 1) * bombDistance);
-    monsters.forEach((monster, idx) => {
-        monster.x = (idx + 1) * monsterDistance;
-        monsterElems[idx].style.left = `${monster.x}px`;
-    });
     DOM.x = 145;
+    // initialises background color and start button visibility after death scene
+    bodyElem.style.backgroundColor = 'gray';
+    startBtn.style.visibility = 'visible';
+    // update the x position of runner, bombs, mosters, and the background Elem
     backgroundX = 0;
-    backgroundElem.style.transform = `translateX(${backgroundX}px)`
+    backgroundElem.style.transform = `translateX(${backgroundX}px)`;
+    if(bombElems.length > 0) bombElems.forEach(elem => elem.remove());
+    if(monsterElems.length > 0) monsterElems.forEach(elem => elem.remove());
+    bombs = [];
+    monsters = [];
+    createBombs(7);
+    createMonsters(8);
     // initializes score, sets animation to idle and updates ready to start. 
     score = 0;
     DOM.currentAnimation = 'idle';
@@ -191,10 +190,12 @@ function init() {
 }
 
 function startNewGame() {
-    gameOn = true;
-    animationIdx = 0;
-    DOM.currentAnimation = 'running';
-    backgroundscroll();
+    if (!gameOn) {
+        gameOn = true;
+        animationIdx = 0;
+        DOM.currentAnimation = 'running';
+        backgroundscroll();
+    }
 }
 
 function render() {
@@ -209,7 +210,7 @@ function render() {
         //this renders the run animation
         else if (DOM.currentAnimation === 'running') {
             domRunnerElem.setAttribute('src', `${DOM.runAnimation[animationIdx]}`);
-            animationIdx++
+            animationIdx++;
             if (animationIdx === DOM.runAnimation.length - 1) animationIdx = 0;
         }
 
@@ -225,39 +226,39 @@ function render() {
             domRunnerElem.setAttribute('src', `${DOM.attackAnimation[animationIdx]}`);
             animationIdx++;
             if (animationIdx === DOM.attackAnimation.length - 1) {
-                DOM.currentAnimation = 'running'
+                DOM.currentAnimation = 'running';
                 animationIdx = 0;
             }
         }
 
         // this renders death animation
         if (DOM.currentAnimation === 'died') {
+            gameOn = false;
+            readyToStart = false; // might not need this bool
             domRunnerElem.setAttribute('src', `${DOM.dieAnimation[animationIdx]}`);
             animationIdx++;
             if (animationIdx === DOM.dieAnimation.length - 1) {
                 animationIdx = 0;
-                gameOn = false;
-                readyToStart = false; // might not need this bool
                 return;
             }
         }
 
         // this renders bomb animation and runs collision detection on bomb objects 
         bombs.forEach((bomb, idx) => {
-            bombElems[idx].setAttribute('src', `${bombAnimation[bombAnimationIdx]}`)
+            bombElems[idx].setAttribute('src', `${bombAnimation[bombAnimationIdx]}`);
 
 
-            DOM.collisionDetection(bomb);       //////////////////////////////////////////BOMB COLLISION////////////////////////////////////////////////////////////
+            // DOM.collisionDetection(bomb);       //////////////////////////////////////////BOMB COLLISION////////////////////////////////////////////////////////////
 
 
         })
         //this renders laser animation and runs collision detection on laser vs moster objects;
-        laserElems = document.querySelectorAll('.laser')
+        laserElems = document.querySelectorAll('.laser');
         if (lasers.length > 0) {
             lasers.forEach((laser, laserIdx) => {
                 if (laser.x > DOM.x + 100) {
-                    laserElems[laserIdx].remove()
-                    lasers.splice(laserIdx, 1)
+                    laserElems[laserIdx].remove();
+                    lasers.splice(laserIdx, 1);
                 }
                 laserElems[laserIdx].setAttribute('src', `${laserAnimation[bombAnimationIdx]}`);
                 monsters.forEach((monster, monsterIdx) => laser.collisionDetection(monster, monsterIdx, laserIdx));
@@ -279,9 +280,18 @@ function render() {
         if (monsterAnimationIdx > mosterAnimation.length - 1) monsterAnimationIdx = 0;
 
         // win case 
-        if (DOM.x > 5100) {
-            alert(`you've won!!!`)
+        if (DOM.x > 5200) {
+            DOM.x = 145;
+            bodyElem.style.backgroundColor = 'black'
+            promtCard.style.visibility = 'visible';
+            promtElem.textContent = 'YOU WIN!!';
+            promtElem.style.color = '#4F6377';
+            resetBtn.textContent = 'PLAY AGAIN?';
+            promtCard.style.opacity = '1';
             DOM.currentAnimation = 'idle'
+            gameOn = false;
+            readyToStart = false;
+            return;
         }
         requestAnimationFrame(render);
     }, 150)
@@ -304,7 +314,7 @@ function animateJump() {
 }
 
 function backgroundscroll() {
-    if (DOM.currentAnimation === 'died') return;
+    if (!gameOn) return;
     DOM.x += 5
     backgroundX -= 5
     backgroundElem.style.transform = `translateX(${backgroundX}px)`
