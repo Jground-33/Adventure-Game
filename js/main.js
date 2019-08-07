@@ -49,12 +49,12 @@ const DOM = {
     ],
     collisionDetection: function (object) {
         if (this.x + this.width > object.x && this.x < (object.x + object.width) && this.y + this.height > object.y) {
-            console.log(object);
             DOM.currentAnimation = 'died';
             bodyElem.style.backgroundColor = 'black';
             promtCard.style.visibility = 'visible';
             promtCard.style.opacity = '1';
             startBtn.style.visibility = 'hidden';
+            instructionsBtn.style.visibility = 'hidden';
         }
     },
     currentAnimation: 'idle', // idle, running, jumping, attacking;
@@ -108,6 +108,7 @@ class Laser {
             monsterElems[monsterIndex].remove()
             lasers.splice(laserIndex, 1)
             monsters.splice(monsterIndex, 1)
+            score += 100;
         }
     }
 }
@@ -123,23 +124,46 @@ let backgroundX = 0;
 let lasers = [];
 let gameOn = false;
 let readyToStart = false; // might not need this bool
+let instructionsShown = false;
 
 /*----- cached element references -----*/
 const bodyElem = document.querySelector('body');
+const scoreElem = document.getElementById('score');
+const instructionsBtn = document.getElementById('instructions');
 const startBtn = document.getElementById('start');
 const backgroundElem = document.getElementById('background');
 const domRunnerElem = document.getElementById('DOM-runner');
 const promtCard = document.getElementById('promt-card');
 const promtElem = document.getElementById('promt');
 const resetBtn = document.getElementById('reset');
+const instructionsCard = document.getElementById('instruction-card');
+
 let bombElems = [];
 let monsterElems = [];
 let laserElems;
 
-
 /*----- event listeners -----*/
+// toggles intstuction card diplayed on screen 
+instructionsBtn.addEventListener('click', () => {
+    if (!gameOn) {
+        if (!instructionsShown) {
+            instructionsCard.style.height = '50%';
+            instructionsCard.style.padding = `30px`;
+            instructionsShown = !(instructionsShown)
+        } else {
+            instructionsCard.style.height = '0';
+            instructionsCard.style.padding = `0`;
+            instructionsShown = !(instructionsShown)
+        }
+    }
+});
+
 startBtn.addEventListener('click', () => {
-    if (readyToStart) startNewGame(); // might not need this bool
+    if (readyToStart) {
+        instructionsCard.style.height = '0';
+        instructionsCard.style.padding = `0`;
+        startNewGame(); // might not need this bool
+    }
 });
 
 resetBtn.addEventListener('click', () => {
@@ -173,17 +197,19 @@ function init() {
     // initialises background color and start button visibility after death scene
     bodyElem.style.backgroundColor = 'gray';
     startBtn.style.visibility = 'visible';
+    instructionsBtn.style.visibility = 'visible';
+    score = 0;
+    scoreElem.textContent = `Score:${score}`
     // update the x position of runner, bombs, mosters, and the background Elem
     backgroundX = 0;
     backgroundElem.style.transform = `translateX(${backgroundX}px)`;
-    if(bombElems.length > 0) bombElems.forEach(elem => elem.remove());
-    if(monsterElems.length > 0) monsterElems.forEach(elem => elem.remove());
+    if (bombElems.length > 0) bombElems.forEach(elem => elem.remove());
+    if (monsterElems.length > 0) monsterElems.forEach(elem => elem.remove());
     bombs = [];
     monsters = [];
     createBombs(6);
     createMonsters(7);
     // initializes score, sets animation to idle and updates ready to start. 
-    score = 0;
     DOM.currentAnimation = 'idle';
     readyToStart = true; // might not need this bool
     render();
@@ -246,7 +272,7 @@ function render() {
         // this renders bomb animation and runs collision detection on bomb objects 
         bombs.forEach((bomb, idx) => {
             bombElems[idx].setAttribute('src', `${bombAnimation[bombAnimationIdx]}`);
-            DOM.collisionDetection(bomb);       //////////////////////////////////////////////////BOMB COLLISION///////////////////////////////////////////////////////////////
+            DOM.collisionDetection(bomb); //////////////////////////////////////////////////BOMB COLLISION///////////////////////////////////////////////////////////////
         })
         //this renders laser animation and runs collision detection on laser vs moster objects;
         laserElems = document.querySelectorAll('.laser');
@@ -356,14 +382,15 @@ function spawnLaser() {
 
 function renderWin() {
     DOM.x = 145;
-            startBtn.style.visibility = 'hidden';
-            bodyElem.style.backgroundColor = 'black'
-            promtCard.style.visibility = 'visible';
-            promtElem.textContent = 'YOU WIN!!';
-            promtElem.style.color = '#4F6377';
-            resetBtn.textContent = 'PLAY AGAIN?';
-            promtCard.style.opacity = '1';
-            DOM.currentAnimation = 'idle'
-            gameOn = false;
-            readyToStart = false;
+    instructionsBtn.style.visibility = 'hidden';
+    startBtn.style.visibility = 'hidden';
+    bodyElem.style.backgroundColor = 'black'
+    promtCard.style.visibility = 'visible';
+    promtElem.textContent = 'YOU WIN!!';
+    promtElem.style.color = '#4F6377';
+    resetBtn.textContent = 'PLAY AGAIN?';
+    promtCard.style.opacity = '1';
+    DOM.currentAnimation = 'idle'
+    gameOn = false;
+    readyToStart = false;
 }

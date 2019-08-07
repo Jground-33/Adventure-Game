@@ -143,27 +143,27 @@ header {
 }
 
 #instruction-card {
+    position: absolute;
+    top: 21%;
     opacity: .85;
-    padding: 30px;
+    padding: 0;
     color: white;
     border-radius: 1em;
     background-color: #222222;
-    margin: 12.5% auto;
     width: 50%;
-    height: 50%;
+    height: 0;
+    overflow: hidden;
+    transition: all .4s ease-in-out;
     z-index: 2;
     display: flex;
     flex-direction: column;
-    /* justify-content: flex-start; */
     align-items: center;
 }
 
 #how-to {
-    margin: 0 auto;
+    line-height: 3em;
     padding: 20px;
-    background-color: black;
+    background-color: #111111;
     width: 90%;
     height: 70%;
-    
-
 }
