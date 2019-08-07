@@ -1,12 +1,10 @@
 /*----- constants -----*/
 const DOM = {
-    x: 0,
-    y: 350, // value in pixels
+    x: 145, // value based on relative to viewport 0x
+    y: 350, // value based on relative to viewport 0y
     height: 85,
     width: 45,
     yVelocity: 0,
-    innerRange: 135, // left side of DOM
-    outerRange: 180, // right side of DOM
     runAnimation: [
         '../resources/v2.1/Indvidual Sprites/adventurer-run-00-1.3.png',
         '../resources/v2.1/Indvidual Sprites/adventurer-run-01-1.3.png',
@@ -51,7 +49,7 @@ const DOM = {
         '../resources/v2.1/Indvidual Sprites/adventurer-idle-03-1.3.png',
     ],
     collisionDetection: function (object) {
-        if (this.outerRange > object.x && this.innerRange < (object.x + object.width) && this.y + this.height > object.y) {
+        if (this.x + this.width > object.x && this.x < (object.x + object.width) && this.y + this.height > object.y) {
             console.log(object);
             DOM.currentAnimation = 'died';
             document.querySelector('body').style.backgroundColor = 'black';
@@ -94,18 +92,17 @@ class Monster {
         this.x = x;
         this.y = 365;
         this.width = 60;
-        this.relX = x;
     }
 }
 
 class Laser {
-    constructor(x, y, relX) {
-        this.x = x;
+    constructor(x, y) {
+        this.height = 75;
+        this.width = 100;
+        this.x = x - this.width;
         this.y = y;
-        this.height = 77;
-        this.width = 104;
-        this.relX = relX;
     }
+
     collisionDetection(monster, monsterIndex, laserIndex) {
         if (this.x + this.width > monster.x && this.x < (monster.x + monster.width)) { //&& this.y + this.height < monster.y
             alert('laser hit monster')
@@ -122,6 +119,7 @@ let score;
 let animationIdx = 0;
 let bombAnimationIdx = 0;
 let monsterAnimationIdx = 0;
+let backgroundX = 0;
 let bombs = [];
 let monsters = [];
 let lasers = [];
@@ -181,7 +179,7 @@ window.addEventListener('keydown', function (event) {
         DOM.yVelocity -= 20;
         animateJump();
     }
-    if (event.code === 'Space' && DOM.currentAnimation !== 'attacking' && gameOn) { 
+    if (event.code === 'Space' && DOM.currentAnimation !== 'attacking' && gameOn) {
         DOM.currentAnimation = 'attacking';
         animationIdx = 0;
         spawnLaser()
@@ -199,11 +197,11 @@ function init() {
     bombs.forEach((bomb, idx) => bomb.x = (idx + 1) * 750);
     monsters.forEach((monster, idx) => {
         monster.x = (idx + 1) * 900;
-        monster.relX = (idx + 1) * 900;
-        monsterElems[idx].style.left = `${monster.relX}px`;
+        monsterElems[idx].style.left = `${monster.x}px`;
     });
-    DOM.x = 0;
-    backgroundElem.style.transform = `translateX(${DOM.x}px)`;
+    DOM.x = 145;
+    backgroundX = 0;
+    backgroundElem.style.transform = `translateX(${backgroundX.x}px)`;
     // initializes score, sets animation to idle and updates ready to start. 
     score = 0;
     DOM.currentAnimation = 'idle';
@@ -288,7 +286,7 @@ function render() {
         if (monsterAnimationIdx > mosterAnimation.length - 1) monsterAnimationIdx = 0;
 
         // win case 
-        if (DOM.x < -5100) {
+        if (DOM.x > 5100) {
             alert(`you've won!!!`)
             DOM.currentAnimation = 'idle'
         }
@@ -314,18 +312,16 @@ function animateJump() {
 
 function backgroundscroll() {
     if (DOM.currentAnimation === 'died') return;
-    DOM.x -= 5
-    backgroundElem.style.transform = `translateX(${DOM.x}px)`
-    bombs.forEach(bomb => bomb.x -= 5)
+    DOM.x += 5
+    backgroundX -= 5
+    backgroundElem.style.transform = `translateX(${backgroundX}px)`
     monsters.forEach((monster, idx) => {
-        monster.x -= 7;
-        monster.relX -= 2;
-        monsterElems[idx].style.left = `${monster.relX}px`;
+        monster.x -= 2;
+        monsterElems[idx].style.left = `${monster.x}px`;
     });
     lasers.forEach((laser, idx) => {
-        laser.x += 5;
-        laser.relX += 10;
-        laserElems[idx].style.left = `${laser.relX}px`;
+        laser.x += 10;
+        laserElems[idx].style.left = `${laser.x}px`;
     });
     requestAnimationFrame(backgroundscroll)
 }
@@ -333,12 +329,13 @@ function backgroundscroll() {
 
 function spawnLaser() {
     //spawn laser object, push into lasers array, create DOM element
-    let laser = new Laser(DOM.x + DOM.innerRange, DOM.y, DOM.innerRange + (Math.abs(DOM.x)))
+    let laser = new Laser(Math.abs(DOM.x), DOM.y, DOM.innerRange + (Math.abs(DOM.x)))
     let img = document.createElement('img');
     lasers.push(laser);
+    // console.log(lasers)
     img.className = 'laser';
     img.setAttribute('src', '../resources/laserBlast0.png');
-    img.style.left = `${laser.relX}px`;
+    img.style.left = `${laser.x}px`;
     img.style.opacity = `.9`
     backgroundElem.append(img);
     laserElems = document.querySelectorAll('.laser');

@@ -66,6 +66,7 @@ header {
     left: 100px;
     z-index: 1;
     opacity: .9;
+    /* border: solid red 2px; */
 }
 
 .laser {
@@ -75,7 +76,7 @@ header {
     top: 375px;
     opacity: 0;
     transition: opacity .5s;
-    /* left: 125px; */
+    left: 125px;
 }
 
 #collision-box {
