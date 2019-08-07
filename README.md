@@ -2,7 +2,7 @@
 
 ## WireFrame
 
-![Wireframe image](./resources/AdventueGameWireFrame.png)
+![Wireframe image](./assets/AdventueGameWireFrame.png)
 
 
 ## Deployed Link 
