@@ -239,6 +239,10 @@ function init() {
     createMonsters(7);
     createCoins(12)
     // initializes score, sets animation to idle and updates ready to start. 
+    promtElem.style.color = 'red';
+    resetBtn.textContent = 'CONTINUE';
+    promtElem.textContent = 'GAME OVER';
+    document.getElementById('final-score').textContent = ``
     DOM.currentAnimation = 'idle';
     readyToStart = true; // might not need this bool
     render();
