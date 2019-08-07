@@ -114,8 +114,8 @@ class Laser {
 
 /*----- app's (variables) -----*/
 let score, bombs, monsters;
-let bombDistance = 700;
-let monsterDistance = 700;
+let bombDistance = 800;
+let monsterDistance = 820;
 let animationIdx = 0;
 let bombAnimationIdx = 0;
 let monsterAnimationIdx = 0;
@@ -180,8 +180,8 @@ function init() {
     if(monsterElems.length > 0) monsterElems.forEach(elem => elem.remove());
     bombs = [];
     monsters = [];
-    createBombs(7);
-    createMonsters(8);
+    createBombs(6);
+    createMonsters(7);
     // initializes score, sets animation to idle and updates ready to start. 
     score = 0;
     DOM.currentAnimation = 'idle';
@@ -246,11 +246,7 @@ function render() {
         // this renders bomb animation and runs collision detection on bomb objects 
         bombs.forEach((bomb, idx) => {
             bombElems[idx].setAttribute('src', `${bombAnimation[bombAnimationIdx]}`);
-
-
-            DOM.collisionDetection(bomb);       //////////////////////////////////////////BOMB COLLISION////////////////////////////////////////////////////////////
-
-
+            DOM.collisionDetection(bomb);       //////////////////////////////////////////////////BOMB COLLISION///////////////////////////////////////////////////////////////
         })
         //this renders laser animation and runs collision detection on laser vs moster objects;
         laserElems = document.querySelectorAll('.laser');
@@ -270,27 +266,14 @@ function render() {
         monsterElems = document.querySelectorAll('.monster')
         monsters.forEach((monster, idx) => {
             monsterElems[idx].setAttribute('src', `${mosterAnimation[monsterAnimationIdx]}`)
-
-
-            DOM.collisionDetection(monster); //////////////////////////////////////////MONSTER COLLISION////////////////////////////////////////////////////////////
-
-
+            DOM.collisionDetection(monster); /////////////////////////////////////////////////////MONSTER COLLISION////////////////////////////////////////////////////////////
         })
         monsterAnimationIdx++;
         if (monsterAnimationIdx > mosterAnimation.length - 1) monsterAnimationIdx = 0;
 
         // win case 
         if (DOM.x > 5200) {
-            DOM.x = 145;
-            bodyElem.style.backgroundColor = 'black'
-            promtCard.style.visibility = 'visible';
-            promtElem.textContent = 'YOU WIN!!';
-            promtElem.style.color = '#4F6377';
-            resetBtn.textContent = 'PLAY AGAIN?';
-            promtCard.style.opacity = '1';
-            DOM.currentAnimation = 'idle'
-            gameOn = false;
-            readyToStart = false;
+            renderWin()
             return;
         }
         requestAnimationFrame(render);
@@ -368,5 +351,19 @@ function spawnLaser() {
         img.style.opacity = `.9`
         backgroundElem.append(img);
         laserElems = document.querySelectorAll('.laser');
-    }, 00)
+    }, 100)
+}
+
+function renderWin() {
+    DOM.x = 145;
+            startBtn.style.visibility = 'hidden';
+            bodyElem.style.backgroundColor = 'black'
+            promtCard.style.visibility = 'visible';
+            promtElem.textContent = 'YOU WIN!!';
+            promtElem.style.color = '#4F6377';
+            resetBtn.textContent = 'PLAY AGAIN?';
+            promtCard.style.opacity = '1';
+            DOM.currentAnimation = 'idle'
+            gameOn = false;
+            readyToStart = false;
 }

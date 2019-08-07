@@ -1,10 +1,10 @@
 * {
     font-family: 'Press Start 2P', cursive;
 }
+
 html {
     background-color: gray;
 }
-
 
 body {
     background: gray;
@@ -38,7 +38,12 @@ header {
 }
 
 #start {
-    margin: 10px;
+    height: 40%;
+    border-radius: 10px;
+}
+
+#instructions {
+    margin-left: 10px;
     height: 40%;
     border-radius: 10px;
 }
@@ -66,15 +71,12 @@ header {
     left: 100px;
     z-index: 1;
     opacity: .9;
-    /* border: solid red 2px; */
 }
 
 .laser {
     position: absolute;
     height: 75px;
     width: 100px;
-    /* top: 375px; */
-    /* left: 125px */
     opacity: 0;
     transition: opacity .5s;
 }
@@ -119,7 +121,7 @@ header {
 }
 
 #reset {
-    height:15%;
+    height: 15%;
     border-radius: 1em;
 }
 
@@ -129,4 +131,39 @@ header {
     height: 80px;
     top: 365px;
     opacity: .8;
+}
+
+#overlay {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+}
+
+#instruction-card {
+    opacity: .85;
+    padding: 30px;
+    color: white;
+    border-radius: 1em;
+    background-color: #222222;
+    margin: 12.5% auto;
+    width: 50%;
+    height: 50%;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    /* justify-content: flex-start; */
+    align-items: center;
+}
+
+#how-to {
+    margin: 0 auto;
+    padding: 20px;
+    background-color: black;
+    width: 90%;
+    height: 70%;
+    
+
 }
