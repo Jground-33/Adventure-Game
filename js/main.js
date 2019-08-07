@@ -109,6 +109,7 @@ class Laser {
             lasers.splice(laserIndex, 1)
             monsters.splice(monsterIndex, 1)
             score += 100;
+            scoreElem.textContent = `Score:${formatWithPadding(score)}`
         }
     }
 }
@@ -199,7 +200,7 @@ function init() {
     startBtn.style.visibility = 'visible';
     instructionsBtn.style.visibility = 'visible';
     score = 0;
-    scoreElem.textContent = `Score:${score}`
+    scoreElem.textContent = `Score:${formatWithPadding(score)}`
     // update the x position of runner, bombs, mosters, and the background Elem
     backgroundX = 0;
     backgroundElem.style.transform = `translateX(${backgroundX}px)`;
@@ -393,4 +394,10 @@ function renderWin() {
     DOM.currentAnimation = 'idle'
     gameOn = false;
     readyToStart = false;
+}
+
+function formatWithPadding(num, char = '0', num2 = 5) {
+    let numArray = num.toString().split('');
+    while(numArray.length < num2) numArray.unshift(char)
+    return numArray.join('')
 }
