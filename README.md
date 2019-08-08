@@ -6,9 +6,9 @@
 
 ## How To Play
 
-Ths Object of the game is to reach the end ALIVE!!! 
-Jump, dodge, and annihilate any monster in your path!
-Bonus points for killing monsters and collecting coins. 
+Ths Object of the game is to reach the end ALIVE!!!  
+Jump, dodge, and annihilate any monster in your path!  
+Bonus points for killing monsters and collecting coins.   
 
 ### Pressing Spacebar will tell DOM to attack!
 
