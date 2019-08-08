@@ -111,12 +111,13 @@ class Laser {
 
     collisionDetection(monster, monsterIndex, laserIndex) {
         if (this.x + this.width > monster.x && this.x < (monster.x + monster.width) && this.y + this.height > monster.y) {
-            laserElems[laserIndex].remove()
-            monsterElems[monsterIndex].remove()
-            lasers.splice(laserIndex, 1)
-            monsters.splice(monsterIndex, 1)
+            monsterGrunt.play();
+            laserElems[laserIndex].remove();
+            monsterElems[monsterIndex].remove();
+            lasers.splice(laserIndex, 1);
+            monsters.splice(monsterIndex, 1);
             score += 500;
-            scoreElem.textContent = `Score:${formatWithPadding(score)}`
+            scoreElem.textContent = `Score:${formatWithPadding(score)}`;
         }
     }
 }
@@ -134,6 +135,7 @@ class Coin {
             scoreElem.textContent = `Score:${formatWithPadding(score)}`
             coins.splice(coinIndex, 1)
             coinElems[coinIndex].remove();
+            coinSound.play();
         }
     }
 }
@@ -150,6 +152,9 @@ let lasers = [];
 let gameOn = false;
 let readyToStart = false; // might not need this bool
 let instructionsShown = false;
+const coinSound = new Audio('./assets/341695__projectsu012__coins-1.wav')
+const laserSound = new Audio('./assets/348164__djfroyd__laser-one-shot-1.wav')
+const monsterGrunt = new Audio('./assets/76958__michel88__deathd.wav')
 
 /*----- cached element references -----*/
 const bodyElem = document.querySelector('body');
@@ -162,6 +167,7 @@ const promtCard = document.getElementById('promt-card');
 const promtElem = document.getElementById('promt');
 const resetBtn = document.getElementById('reset');
 const instructionsCard = document.getElementById('instruction-card');
+const music = document.getElementById('background-music');
 let coinElems = [];
 let bombElems = [];
 let monsterElems = [];
@@ -208,13 +214,14 @@ window.addEventListener('keydown', function (event) {
     if (event.code === 'Space' && DOM.currentAnimation !== 'attacking' && gameOn) {
         DOM.currentAnimation = 'attacking';
         animationIdx = 0;
+        laserSound.play()
         spawnLaser();
     }
 });
 
 /*----- functions -----*/
-
-
+music.volume = .7;
+music.play();
 init();
 
 function init() {
