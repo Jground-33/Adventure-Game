@@ -49,7 +49,7 @@ create obstacles class.
 create coins class.  
 * coin objects will have x,y positions, and collision detection methods to collide with character.  
   
-:Optional: laser beam class  
+add a laser beam class  
 * laser beam object will have x,y positions and constant x speed properties with delete() and move() methods.  
   
 :Optional: create air enemies class for later levels.  
@@ -64,5 +64,31 @@ create coins class.
 
 * AAU I want to be able to control the character to attack enemies with a button press. 
 
-* AAU I want to have clear feedback about my score and if the game is over
+* AAU I want to have clear feedback about my score and if the game is over.
 
+
+## Future goals 
+
+* optimization on game loop nad collision detection.
+
+* render background image with a parallax scroll. 
+
+* additional levels with more eniemies and obstacles.
+
+* changes controls to move the character in both directions.
+
+* add more moves like slide and block. 
+
+* ...
+
+## Technologies Used: 
+
+HTML, CSS, Vanilla JavaScript.
+
+## Credits
+
+Main Character Images - https://rvros.itch.io/animated-pixel-hero
+
+Monsters and Coin Images - https://0x72.itch.io/dungeontileset-ii
+
+Background Image - https://edermunizz.itch.io/free-pixel-art-forest
