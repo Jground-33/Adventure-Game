@@ -58,7 +58,9 @@ add a laser beam class
 
 ## User Stories 
 
-* AAU I want to control the character's ability to jump by pressing the space bar. 
+* AAU I want to control the character's ability to jump by pressing the UpArrow. 
+
+* AAU I want to have clear instructions on how to play.  
 
 * AAU I want to be able to click a button to start a new game.
 
