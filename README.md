@@ -1,7 +1,5 @@
 # DOM-runner
 
-## Screenshots
-
 ![Screenshot](./assets/GameScreenshot.png)
 
 ## How To Play
@@ -23,7 +21,6 @@ Bonus points for killing monsters and collecting coins.
 [Play my Game](https://jground-33.github.io/Adventure-Game/)
 
 ## Psuedocode 
-
 
 create a game viewport.  
 * create a HTML header to diplay score, reset button and game Title.  
@@ -68,6 +65,9 @@ add a laser beam class
 
 * AAU I want to have clear feedback about my score and if the game is over.
 
+## Wireframe 
+
+![Screenshot](./assets/AdventueGameWireFrame.png)
 
 ## Future goals 
 
