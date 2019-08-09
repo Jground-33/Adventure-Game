@@ -81,14 +81,6 @@ header {
     transition: opacity .5s;
 }
 
-#collision-box {
-    border: solid green 2px;
-    position: absolute;
-    width: 45px;
-    height: 85px;
-    top: 365px;
-    left: 135px;
-}
 
 .bomb {
     position: absolute;
