@@ -226,7 +226,7 @@ init();
 
 function init() {
     DOM.x = 145;
-    // initialises background color and start button visibility after death scene
+    // initializes background color and start button visibility after death scene
     bodyElem.style.backgroundColor = 'gray';
     startBtn.style.visibility = 'visible';
     instructionsBtn.style.visibility = 'visible';
@@ -260,7 +260,7 @@ function startNewGame() {
         gameOn = true;
         animationIdx = 0;
         DOM.currentAnimation = 'running';
-        backgroundscroll();
+        backgroundScroll();
     }
 }
 
@@ -369,7 +369,7 @@ function animateJump() {
     }
 }
 
-function backgroundscroll() {
+function backgroundScroll() {
     if (!gameOn) return;
     DOM.x += 5
     backgroundX -= 5
@@ -382,7 +382,7 @@ function backgroundscroll() {
         laser.x += 10;
         laserElems[idx].style.left = `${laser.x}px`;
     });
-    requestAnimationFrame(backgroundscroll)
+    requestAnimationFrame(backgroundScroll)
 }
 
 function createBombs(numBombs) {
