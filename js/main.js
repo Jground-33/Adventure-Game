@@ -1,3 +1,6 @@
+import Coin from './Coin.js';
+
+
 /*----- constants -----*/
 const DOM = {
     x: 145, // value based on relative to viewport 0x
@@ -116,62 +119,61 @@ class Laser {
             monsterElems[monsterIndex].remove();
             lasers.splice(laserIndex, 1);
             monsters.splice(monsterIndex, 1);
-            score += 500;
-            scoreElem.textContent = `Score:${formatWithPadding(score)}`;
+            window.score += 500;
+            scoreElem.textContent = `Score:${formatWithPadding(window.score)}`;
         }
     }
 }
 
-class Coin {
-    constructor(x) {
-        this.x = x;
-        this.y = 275;
-        this.height = 20;
-        this.width = 20;
-    }
-    collisionDetection(runner, coinIndex) {
-        if (runner.x + runner.width > this.x && runner.x < (this.x + this.width) && runner.y + runner.height > this.y && runner.y < this.y + this.height) {
-            score += 100;
-            scoreElem.textContent = `Score:${formatWithPadding(score)}`
-            coins.splice(coinIndex, 1)
-            coinElems[coinIndex].remove();
-            coinSound.play();
-        }
-    }
-}
+// class Coin {
+//     constructor(x) {
+//         this.x = x;
+//         this.y = 275;
+//         this.height = 20;
+//         this.width = 20;
+//     }
+//     collisionDetection(runner, coinIndex) {
+//         if (runner.x + runner.width > this.x && runner.x < (this.x + this.width) && runner.y + runner.height > this.y && runner.y < this.y + this.height) {
+//             score += 100;
+//             scoreElem.textContent = `Score:${formatWithPadding(score)}`
+//             coins.splice(coinIndex, 1)
+//             coinElems[coinIndex].remove();
+//             coinSound.play();
+//         }
+//     }
+// }
 
 /*----- app's (variables) -----*/
-let score, bombs, monsters, coins;
-let bombDistance = 800;
-let monsterDistance = 820;
-let animationIdx = 0;
-let bombAnimationIdx = 0;
-let monsterAnimationIdx = 0;
-let backgroundX = 0;
-let lasers = [];
-let gameOn = false;
-let readyToStart = false; // might not need this bool
-let instructionsShown = false;
-const coinSound = new Audio('./assets/341695__projectsu012__coins-1.wav')
-const laserSound = new Audio('./assets/348164__djfroyd__laser-one-shot-1.wav')
-const monsterGrunt = new Audio('./assets/76958__michel88__deathd.wav')
+var score, bombs, monsters, coins;
+var bombDistance = 800;
+var monsterDistance = 820;
+var animationIdx = 0;
+var bombAnimationIdx = 0;
+var monsterAnimationIdx = 0;
+var backgroundX = 0;
+var lasers = [];
+var gameOn = false;
+var readyToStart = false; // might not need this bool
+var instructionsShown = false;
+var laserSound = new Audio('./assets/348164__djfroyd__laser-one-shot-1.wav')
+var monsterGrunt = new Audio('./assets/76958__michel88__deathd.wav')
+var music = new Audio('./assets/Backgroundmusic.wav')
 
 /*----- cached element references -----*/
-const bodyElem = document.querySelector('body');
-const scoreElem = document.getElementById('score');
-const instructionsBtn = document.getElementById('instructions');
-const startBtn = document.getElementById('start');
-const backgroundElem = document.getElementById('background');
-const domRunnerElem = document.getElementById('DOM-runner');
-const promtCard = document.getElementById('promt-card');
-const promtElem = document.getElementById('promt');
-const resetBtn = document.getElementById('reset');
-const instructionsCard = document.getElementById('instruction-card');
-const music = document.getElementById('background-music');
-let coinElems = [];
-let bombElems = [];
-let monsterElems = [];
-let laserElems;
+var bodyElem = document.querySelector('body');
+var scoreElem = document.getElementById('DOMscore');
+var instructionsBtn = document.getElementById('instructions');
+var startBtn = document.getElementById('start');
+var backgroundElem = document.getElementById('background');
+var domRunnerElem = document.getElementById('DOM-runner');
+var promtCard = document.getElementById('promt-card');
+var promtElem = document.getElementById('promt');
+var resetBtn = document.getElementById('reset');
+var instructionsCard = document.getElementById('instruction-card');
+var coinElems = [];
+var bombElems = [];
+var monsterElems = [];
+var laserElems;
 
 /*----- event listeners -----*/
 // toggles intstuction card diplayed on screen 
@@ -220,6 +222,13 @@ window.addEventListener('keydown', function (event) {
 });
 
 /*----- functions -----*/
+window.formatWithPadding = function(num, char = '0', num2 = 5) {
+    let numArray = num.toString().split('');
+    while (numArray.length < num2) numArray.unshift(char)
+    return numArray.join('')
+}
+
+
 music.volume = .7;
 music.play();
 init();
@@ -231,8 +240,8 @@ function init() {
     startBtn.style.visibility = 'visible';
     instructionsBtn.style.visibility = 'visible';
     //resetting score to 0
-    score = 0;
-    scoreElem.textContent = `Score:${formatWithPadding(score)}`
+    window.score = 0;
+    scoreElem.textContent = `Score:${window.formatWithPadding(window.score)}`
     // update the x position of runner, bombs, mosters, coins, and the background Elem
     backgroundX = 0;
     backgroundElem.style.transform = `translateX(${backgroundX}px)`;
@@ -241,7 +250,7 @@ function init() {
     if (coinElems.length > 0) coinElems.forEach(coin => coin.remove());
     bombs = [];
     monsters = [];
-    coins = [];
+    window.coins = [];
     createBombs(6);
     createMonsters(7);
     createCoins(12)
@@ -335,9 +344,9 @@ function render() {
             DOM.collisionDetection(monster); ///////////////////////////////////////////////////////////MONSTER COLLISION////////////////////////////////////////////////////////////
         })
         // this renders coin animation
-        coinElems = document.querySelectorAll('.coin');
-        coins.forEach((coin, coinIdx) => {
-            coinElems[coinIdx].setAttribute('src', `${coinAnimation[monsterAnimationIdx]}`);
+        window.coinElems = document.querySelectorAll('.coin');
+        window.coins.forEach((coin, coinIdx) => {
+            window.coinElems[coinIdx].setAttribute('src', `${coinAnimation[monsterAnimationIdx]}`);
             coin.collisionDetection(DOM, coinIdx);
         })
 
@@ -432,7 +441,7 @@ function createCoins(numCoins, ) {
     for (let i = 1; i <= numCoins; i++) {
         let coin = new Coin(i * bombDistance / 2 + coinOffset)
         let img = document.createElement('img');
-        coins.push(coin);
+        window.coins.push(coin);
         img.className = 'coin';
         img.setAttribute('src', './assets/coin_anim_f0.png');
         img.style.top = `${coin.y + 25}px`
@@ -443,7 +452,7 @@ function createCoins(numCoins, ) {
     for (let i = 1; i <= numCoins; i++) {
         let coin = new Coin(i * bombDistance / 2 + coinOffset)
         let img = document.createElement('img');
-        coins.push(coin);
+        window.coins.push(coin);
         img.className = 'coin';
         img.setAttribute('src', './assets/coin_anim_f0.png');
         img.style.top = `${coin.y + 25}px`
@@ -454,16 +463,15 @@ function createCoins(numCoins, ) {
     for (let i = 1; i <= numCoins; i++) {
         let coin = new Coin(i * bombDistance / 2 + coinOffset)
         let img = document.createElement('img');
-        coins.push(coin);
+        window.coins.push(coin);
         img.className = 'coin';
         img.setAttribute('src', './assets/coin_anim_f0.png');
         img.style.top = `${coin.y + 25}px`
         img.style.left = `${coin.x}px`;
         backgroundElem.append(img);
     }
-    coinElems = document.querySelectorAll('.coin');
+    window.coinElems = document.querySelectorAll('.coin');
 }
-
 
 function renderWin() {
     DOM.x = 145;
@@ -476,13 +484,7 @@ function renderWin() {
     resetBtn.textContent = 'PLAY AGAIN?';
     promtCard.style.opacity = '1';
     DOM.currentAnimation = 'idle'
-    document.getElementById('final-score').textContent = `FINAL SCORE: ${formatWithPadding(score)}`
+    document.getElementById('final-score').textContent = `FINAL SCORE: ${formatWithPadding(window.score)}`
     gameOn = false;
     readyToStart = false;
-}
-
-function formatWithPadding(num, char = '0', num2 = 5) {
-    let numArray = num.toString().split('');
-    while (numArray.length < num2) numArray.unshift(char)
-    return numArray.join('')
 }
